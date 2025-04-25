@@ -35,7 +35,7 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
             .ToListAsync();
     }
 
-    public async Task<Receipt> GetReceiptById(int id)
+    public async Task<Receipt> GetReceiptById(Guid id)
     {
         return await context.Receipts
             .Include(x => x.Items)

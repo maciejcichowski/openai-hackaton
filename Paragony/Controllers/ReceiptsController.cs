@@ -16,7 +16,7 @@ public class ReceiptsController(IReceiptService receiptService) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Receipt>> GetReceiptById(int id)
+    public async Task<ActionResult<Receipt>> GetReceiptById(Guid id)
     {
         var receipt = await receiptService.GetReceiptById(id);
             
