@@ -42,6 +42,23 @@ public class VoiceController : ControllerBase
         });
     }
     
+    [HttpPost("transcribe")]
+    public async Task<ActionResult<VoiceResponseDto>> Transcribe([FromBody] VoiceRequestDto request)
+    {
+        if (string.IsNullOrEmpty(request.Base64Audio))
+            return BadRequest("Audio data is required");
+
+        var audioBytes = Convert.FromBase64String(request.Base64Audio);
+
+        // Transcribe audio to text
+        var transcription = await _voiceService.TranscribeAudio(audioBytes);
+
+        return Ok(new TranscribeResponseDto
+        {
+            Transcription = transcription
+        });
+    }
+    
     [HttpPost("generate-audio")]
     public async Task<IActionResult> GenerateAudio([FromBody] TextToSpeechRequest request)
     {
@@ -65,6 +82,11 @@ public class VoiceController : ControllerBase
         public required string Base64Audio { get; set; }
     }
 
+    public class TranscribeResponseDto
+    {
+        public required string Transcription { get; set; }
+    }
+    
     public class VoiceResponseDto
     {
         public required string Transcription { get; set; }
