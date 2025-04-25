@@ -1,19 +1,24 @@
 using System.ClientModel;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Schema.Generation;
 using OpenAI;
 using OpenAI.Chat;
 using Paragony.Abstract;
+using Paragony.Data;
 using Paragony.Models;
 
 namespace Paragony.Services;
 
 public class OpenAiService : IOpenAIService
 {
+    private readonly AppDbContext _context;
     private readonly ChatClient _client;
 
-    public OpenAiService(IConfiguration configuration)
+    public OpenAiService(IConfiguration configuration,
+        AppDbContext context)
     {
+        _context = context;
         var apiKey = configuration["OpenAI:ApiKey"]!;
         var visionModel = configuration["OpenAI:VisionModel"]!;
         _client = new ChatClient(visionModel, new ApiKeyCredential(apiKey), new OpenAIClientOptions());
@@ -22,6 +27,9 @@ public class OpenAiService : IOpenAIService
     public async Task<Receipt> AnalyzeReceiptImage(string base64Image)
     {
         var imageData = new BinaryData(Convert.FromBase64String(base64Image));
+        var categories = await _context.Categories.ToListAsync();
+        var categoryNames = categories.Select(c => c.Name).ToList();
+        var categoryNamesString = string.Join(", ", categoryNames);
 
         List<ChatMessage> messages =
         [
@@ -31,7 +39,7 @@ public class OpenAiService : IOpenAIService
                 ChatMessageContentPart.CreateTextPart(
                     "Analyze this receipt image and extract all the information in JSON format"),
                 ChatMessageContentPart.CreateTextPart(
-                    "Categorize each grocery and shopping items. The available categories are: Jedzenie, Chemia, Elektronika, Ubrania, Dom, Alkohol, Inne."),
+                    $"Categorize each grocery and shopping items. The available categories are: {categoryNamesString}."),
                 ChatMessageContentPart.CreateImagePart(imageData, "image/jpeg"))
         ];
 
@@ -71,20 +79,20 @@ public class OpenAiService : IOpenAIService
         "Name":      { "type": ["string", "null"] },
         "Price":     { "type": "number" },
         "Quantity":  { "type": "number" },
-        "Category":  { "type": ["string", "null"] }
+        "CategoryName":  { "type": ["string", "null"] }
       },
       "required": [
         "Name",
         "Price",
         "Quantity",
-        "Category"
+        "CategoryName"
       ],
       "additionalProperties": false
     }
   }
 }
 """;
-            
+
             //generator.Generate(typeof(Receipt));
 
         ChatCompletionOptions options = new()
@@ -93,9 +101,9 @@ public class OpenAiService : IOpenAIService
                 jsonSchemaFormatName: "json_schema",
                 jsonSchema: BinaryData.FromString(schema.ToString()),
                 jsonSchemaIsStrict: true
-                
+
                 ),
-            
+
             MaxOutputTokenCount = 2000
         };
 
@@ -106,7 +114,7 @@ public class OpenAiService : IOpenAIService
         //if (structurizedResponse is null) throw new Exception("Invalid response");
 
         var response = JsonSerializer.Deserialize<Receipt>(completion.Content[0].Text);
-        
+
         return response ?? throw new Exception("Invalid response");
     }
 }

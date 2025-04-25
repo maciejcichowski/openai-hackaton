@@ -20,23 +20,23 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Receipt>()
             .HasKey(r => r.Id);
-    
+
         /*modelBuilder.Entity<Receipt>()
             .Property(r => r.Id)
             .HasValueGenerator<NpgsqlSequentialGuidValueGenerator>();  */
-    
+
         // Configure ReceiptItem entity
         modelBuilder.Entity<ReceiptItem>()
             .HasKey(i => i.Id);
-    
+
         /*modelBuilder.Entity<ReceiptItem>()
             .Property(i => i.Id)
-            .HasValueGenerator<NpgsqlSequentialGuidValueGenerator>();*/ 
-    
+            .HasValueGenerator<NpgsqlSequentialGuidValueGenerator>();*/
+
         // Configure Category entity
         modelBuilder.Entity<Category>()
             .HasKey(c => c.Id);
-    
+
         /*modelBuilder.Entity<Category>()
             .Property(c => c.Id)
             .HasValueGenerator<NpgsqlSequentialGuidValueGenerator>();*/
@@ -45,7 +45,15 @@ public class AppDbContext : DbContext
             .HasMany(x => x.Items)
             .WithOne(x => x.Receipt)
             .HasForeignKey(x => x.ReceiptId);
-       
+
+        modelBuilder.Entity<ReceiptItem>()
+            .HasOne(x => x.Category)
+            .WithMany()
+            .HasForeignKey(x => x.CategoryId);
+
+        modelBuilder.Entity<ReceiptItem>()
+            .Ignore(x => x.CategoryName);
+
         // Seed categories
         modelBuilder.Entity<Category>().HasData(
             new Category { Id = Guid.Parse("4DF2457F-AF33-4C31-8B70-86DB6BDC35AA"), Name = "Jedzenie", Description = "Artykuły spożywcze" },
@@ -54,7 +62,7 @@ public class AppDbContext : DbContext
             new Category { Id = Guid.Parse("AB5BDD86-8BF1-4ED4-8EE1-9A2B9E6995A9"), Name = "Ubrania", Description = "Odzież i obuwie" },
             new Category { Id = Guid.Parse("27DFB8CE-F64A-442D-B3A8-9A767DD83A0E"), Name = "Dom", Description = "Artykuły domowe" },
             new Category { Id = Guid.Parse("27653B89-3B92-4ACE-87C3-F025DCAB07B3"), Name = "Alkohol", Description = "Alkohol" }    ,
-            new Category { Id = Guid.Parse("7223583B-AC12-4DB7-8043-B9D81427FF9E"), Name = "Inne", Description = "Inne" }   
+            new Category { Id = Guid.Parse("7223583B-AC12-4DB7-8043-B9D81427FF9E"), Name = "Inne", Description = "Inne" }
         );
     }
 }
