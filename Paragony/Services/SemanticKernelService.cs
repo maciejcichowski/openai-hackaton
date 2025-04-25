@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Text;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Paragony.Abstract;
 // ReSharper disable UnusedMember.Local
 
@@ -33,22 +35,39 @@ public class SemanticKernelService(
     {
         InitializeKernel();
 
-        var prompt = @"
+        var prompt = @$"
             You are a helpful assistant that helps users get information about their purchase history and receipts.
             Use the ReceiptQueries functions to get the data the user is asking for.
-            
-            User's question: {{$question}}
+            If you cannot find the information in the item name, try categories and dates.
+
+            User's question: {question}
             
             Think step by step about what information you need to retrieve to answer the question.
             ";
 
-        var arguments = new KernelArguments
+        /*var arguments = new KernelArguments
         {
-            ["question"] = question
+            ["question"] = 
+        };*/
+
+        var history = new ChatHistory();
+
+        var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
+
+        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new() 
+        {
+            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
         };
 
-        var result = await _kernel.InvokePromptAsync(prompt, arguments);
-        return result.GetValue<string>();
+        history.AddUserMessage(prompt);
+
+        
+        var result = await chatCompletionService.GetChatMessageContentAsync(
+            history,
+            executionSettings: openAIPromptExecutionSettings,
+            kernel: _kernel);
+        
+        return result.Content;
     }
 
     // Custom plugin for receipt queries that Semantic Kernel can use
@@ -93,6 +112,26 @@ public class SemanticKernelService(
             var parsedDate = DateOnly.Parse(date);
             var amount = await _receiptService.GetSpendingByDate(parsedDate);
             return $"Spending on {parsedDate.ToShortDateString()}: {amount:C}";
+        }
+        
+        [KernelFunction]
+        [Description("Get get most recent recipt containing item by keyword")]
+        public async Task<string> GetLastSpendingByKeyword(
+            [Description("The keyword to search for")]
+            string keyword)
+        {
+            var receipt = await _receiptService.GetLastReceiptContainingKeyword(keyword);
+            
+            var sb = new StringBuilder();
+            sb.AppendLine($"Spending on {receipt.PurchaseDate.ToShortDateString()}: {receipt.TotalAmount:C}");
+            
+            foreach (var receiptItem in receipt.Items)
+            {
+                sb.AppendLine(
+                    $"- Item on the receipt: {receiptItem.Name}  Price: {receiptItem.Price:C}");
+            }
+
+            return sb.ToString();
         }
 
         [KernelFunction]

@@ -71,4 +71,14 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
                         r.Items.Any(i => i.Name.Contains(query) || i.Category.Contains(query)))
             .ToListAsync();
     }
+
+    public async Task<Receipt?> GetLastReceiptContainingKeyword(string query)
+    {
+        return await context.Receipts
+            .Include(r => r.Items)
+            .Where(r => r.StoreName.Contains(query) ||
+                        r.Items.Any(i => i.Name.Contains(query) || i.Category.Contains(query)))
+            .OrderByDescending(r => r.PurchaseDate)
+            .FirstOrDefaultAsync();
+    }
 }
