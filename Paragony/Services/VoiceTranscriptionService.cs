@@ -5,11 +5,11 @@ using Paragony.Abstract;
 
 namespace Paragony.Services;
 
-public class VoiceProcessingService : IVoiceProcessingService
+public class VoiceTranscriptionService : IVoiceTranscriptionService
 {
     private readonly AudioClient _client;
 
-    public VoiceProcessingService(IConfiguration configuration)
+    public VoiceTranscriptionService(IConfiguration configuration)
     {
         var apiKey = configuration["OpenAI:ApiKey"]!;
         _client = new AudioClient("whisper-1", new ApiKeyCredential(apiKey), new OpenAIClientOptions());

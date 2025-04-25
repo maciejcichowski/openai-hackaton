@@ -1,6 +1,6 @@
 namespace Paragony.Abstract;
 
-public interface IVoiceProcessingService
+public interface IVoiceTranscriptionService
 {
     Task<string> TranscribeAudio(byte[] audioData);
 }
