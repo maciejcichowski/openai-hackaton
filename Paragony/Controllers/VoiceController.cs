@@ -42,7 +42,7 @@ public class VoiceController : ControllerBase
         });
     }
     
-    [HttpPost]
+    [HttpPost("generate-audio")]
     public async Task<IActionResult> GenerateAudio([FromBody] TextToSpeechRequest request)
     {
         if (string.IsNullOrEmpty(request.Text))
