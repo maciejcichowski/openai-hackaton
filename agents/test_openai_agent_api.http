@@ -1,0 +1,57 @@
+@api_key = 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
+
+### Create a new agent
+POST http://localhost:5000/agent
+Content-Type: application/json
+X-API-Key: {{api_key}}
+
+{
+    "name": "InwedoAI",
+    "role": "You are a helpful AI assistant."
+}
+
+### Chat with the agent
+POST http://localhost:5000/agent/InwedoAI/chat
+Content-Type: application/json
+X-API-Key: {{api_key}}
+
+{
+    "message": "Hello, can you help me with a programming question?"
+}
+
+### Chat with the agent again
+POST http://localhost:5000/agent/InwedoAI/chat
+Content-Type: application/json
+X-API-Key: {{api_key}}
+
+{
+    "message": "What's the difference between Python and JavaScript?"
+}
+
+### Try to chat with a non-existent agent
+POST http://localhost:5000/agent/Non-existent Agent/chat
+Content-Type: application/json
+X-API-Key: {{api_key}}
+
+{
+    "message": "This should return an error"
+}
+
+### Create another agent
+POST http://localhost:5000/agent
+Content-Type: application/json
+X-API-Key: {{api_key}}
+
+{
+    "name": "Math Tutor",
+    "role": "You are a helpful math tutor, assisting with various mathematical concepts and problems."
+}
+
+### Chat with the Math Tutor agent
+POST http://localhost:5000/agent/Math Tutor/chat
+Content-Type: application/json
+X-API-Key: {{api_key}}
+
+{
+    "message": "Can you explain the Pythagorean theorem?"
+}
