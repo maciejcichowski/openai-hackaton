@@ -12,5 +12,5 @@ public class Receipt
     public string ReceiptNumber { get; set; }
     //public string ImagePath { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public List<ReceiptItem> Items { get; set; } = new();
+    public virtual List<ReceiptItem> Items { get; set; } = new();
 }

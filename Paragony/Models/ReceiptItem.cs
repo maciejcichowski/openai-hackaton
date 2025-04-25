@@ -14,5 +14,5 @@ public class ReceiptItem
         
     public Guid ReceiptId { get; set; }
     [ForeignKey("ReceiptId")]
-    public Receipt Receipt { get; set; }
+    public virtual Receipt Receipt { get; set; }
 }
