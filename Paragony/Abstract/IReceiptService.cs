@@ -7,7 +7,7 @@ public interface IReceiptService
     Task<Receipt> AddReceiptFromImage(string base64Image);
     Task<List<Receipt>> GetAllReceipts();
     Task<Receipt> GetReceiptById(int id);
-    Task<decimal> GetSpendingByCategory(string category, DateTime? startDate, DateTime? endDate);
-    Task<decimal> GetSpendingByDate(DateTime date);
+    Task<decimal> GetSpendingByCategory(string category, DateOnly? startDate, DateOnly? endDate);
+    Task<decimal> GetSpendingByDate(DateOnly date);
     Task<List<Receipt>> SearchReceipts(string query);
 }

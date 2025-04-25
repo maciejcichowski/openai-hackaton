@@ -42,7 +42,7 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
             .FirstOrDefaultAsync(r => r.Id == id) ?? throw new KeyNotFoundException("Receipt not found");
     }
 
-    public async Task<decimal> GetSpendingByCategory(string category, DateTime? startDate, DateTime? endDate)
+    public async Task<decimal> GetSpendingByCategory(string category, DateOnly? startDate, DateOnly? endDate)
     {
         var query = context.ReceiptItems
             .Where(item => item.Category == category);
@@ -56,10 +56,10 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
         return await query.SumAsync(item => item.Price);
     }
 
-    public async Task<decimal> GetSpendingByDate(DateTime date)
+    public async Task<decimal> GetSpendingByDate(DateOnly date)
     {
         return await context.Receipts
-            .Where(r => r.PurchaseDate.Date == date.Date)
+            .Where(r => r.PurchaseDate == date)
             .SumAsync(r => r.TotalAmount);
     }
 

@@ -71,14 +71,14 @@ public class SemanticKernelService(
             [Description("The end date in yyyy-MM-dd format")]
             string? endDate = null)
         {
-            DateTime? start = null;
-            DateTime? end = null;
+            DateOnly? start = null;
+            DateOnly? end = null;
 
             if (!string.IsNullOrEmpty(startDate))
-                start = DateTime.Parse(startDate);
+                start = DateOnly.Parse(startDate);
 
             if (!string.IsNullOrEmpty(endDate))
-                end = DateTime.Parse(endDate);
+                end = DateOnly.Parse(endDate);
 
             var amount = await _receiptService.GetSpendingByCategory(category, start, end);
             return $"Spending in category {category}: {amount:C}";
@@ -90,7 +90,7 @@ public class SemanticKernelService(
             [Description("The date in yyyy-MM-dd format")]
             string date)
         {
-            var parsedDate = DateTime.Parse(date);
+            var parsedDate = DateOnly.Parse(date);
             var amount = await _receiptService.GetSpendingByDate(parsedDate);
             return $"Spending on {parsedDate.ToShortDateString()}: {amount:C}";
         }

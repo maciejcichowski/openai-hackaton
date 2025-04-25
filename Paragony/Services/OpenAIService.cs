@@ -45,10 +45,9 @@ public class OpenAiService : IOpenAIService
 
   "properties": {
     "StoreName":     { "type": ["string", "null"] },
-    "PurchaseDate":  { "type": "string", "null"] },
+    "PurchaseDate":  { "type": "string" },
     "TotalAmount":   { "type": "number" },
     "ReceiptNumber": { "type": ["string", "null"] },
-    "CreatedAt":     { "type": "string", "null"] },
     "Items": {
       "type": ["array", "null"],
       "items": { "$ref": "#/definitions/ReceiptItem" }
@@ -60,7 +59,6 @@ public class OpenAiService : IOpenAIService
     "PurchaseDate",
     "TotalAmount",
     "ReceiptNumber",
-    "CreatedAt",
     "Items"
   ],
   "additionalProperties": false,
