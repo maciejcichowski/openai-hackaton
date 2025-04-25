@@ -12,13 +12,14 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
         // Analyze receipt image using OpenAI
         var receipt = await openAiService.AnalyzeReceiptImage(base64Image);
 
-        // Save image to disk (in a real app, you'd want to use blob storage)
-        /*var imageName = $"{Guid.NewGuid()}.jpg";
+        // Save image to disk
+        var imageName = $"{Guid.NewGuid()}.jpg";
         var imagePath = Path.Combine("Uploads", imageName);
         Directory.CreateDirectory("Uploads");
         await File.WriteAllBytesAsync(imagePath, Convert.FromBase64String(base64Image));
 
-        receipt.ImagePath = imagePath;*/
+        // Store the image file name in the receipt
+        receipt.ImagePath = imageName;
 
         // Save to database
         context.Receipts.Add(receipt);

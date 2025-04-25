@@ -1,25 +1,35 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Chat Assistant</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="chat-container">
-      <div class="messages" #messagesContainer>
-        <div *ngFor="let message of messages"
-             [class.user-message]="message.sender === 'user'"
-             [class.bot-message]="message.sender === 'bot'"
-             class="message">
-          {{message.text}}
-          <span class="timestamp">{{message.timestamp | date:'shortTime'}}</span>
-        </div>
-      </div>
-      <div class="input-container">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Type your message</mat-label>
-          <input matInput [(ngModel)]="newMessage" (keyup.enter)="sendMessage()">
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
-      </div>
+<div class="chat-box-container">
+  <div class="chat-header">
+    <h2>Voice Chat</h2>
+    <button mat-icon-button (click)="closeDialog()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="messages-container">
+    <div *ngFor="let message of messages" 
+         [ngClass]="{'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot'}"
+         class="message">
+      <div class="message-content">{{ message.text }}</div>
+      <div class="message-timestamp">{{ message.timestamp | date:'shortTime' }}</div>
     </div>
-  </mat-card-content>
-</mat-card>
+  </div>
+
+  <div class="recording-status" *ngIf="isRecording">
+    <div class="recording-indicator"></div>
+    <span>Recording...</span>
+    <button mat-raised-button color="warn" (click)="stopRecording()">
+      Stop Recording
+    </button>
+  </div>
+
+  <div class="chat-input">
+    <mat-form-field appearance="outline" class="message-input">
+      <input matInput [(ngModel)]="newMessage" placeholder="Type a message..."
+             (keyup.enter)="sendMessage()" [disabled]="isRecording">
+    </mat-form-field>
+    <button mat-fab color="primary" (click)="sendMessage()" [disabled]="isRecording">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+  </div>
+</div>

@@ -24,5 +24,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/chat-box/chat-box.component')
       .then(m => m.ChatBoxComponent),
     data: { fullScreen: false }
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./components/dashboard/dashboard.component')
+      .then(m => m.DashboardComponent),
+    data: { fullScreen: true }
   }
 ];
