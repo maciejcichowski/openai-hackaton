@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatBoxComponent } from '../chat-box/chat-box.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,7 +9,10 @@ import { ChatBoxComponent } from '../chat-box/chat-box.component';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   openVoiceChat() {
     const dialogRef = this.dialog.open(ChatBoxComponent, {
@@ -21,5 +25,9 @@ export class DashboardComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('Chat dialog closed');
     });
+  }
+
+  navigateToUpload() {
+    this.router.navigate(['/upload']);
   }
 }
