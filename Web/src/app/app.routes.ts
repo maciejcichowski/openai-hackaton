@@ -17,7 +17,7 @@ export const routes: Routes = [
     path: 'receipts',
     loadComponent: () => import('./components/receipt-list/receipt-list.component')
       .then(m => m.ReceiptListComponent),
-    data: { fullScreen: false }
+    data: { fullScreen: true }
   },
   {
     path: 'chat',

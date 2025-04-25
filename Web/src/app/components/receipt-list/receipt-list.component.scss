@@ -12,3 +12,137 @@ table {
     padding: 0 8px;
   }
 }
+
+.receipt-list-container {
+  min-height: 100vh;
+  background-color: #000000;
+  color: white;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 40px;
+  }
+}
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    font-size: 24px;
+    margin: 0;
+
+    @media (min-width: 768px) {
+      font-size: 32px;
+    }
+  }
+
+  .date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+
+    @media (min-width: 768px) {
+      font-size: 16px;
+    }
+
+    i {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}
+
+.receipts {
+  .receipt-item {
+    background-color: #1E1E1E;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    @media (min-width: 768px) {
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+
+      &:hover {
+        background-color: #2A2A2A;
+      }
+    }
+
+    .receipt-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .receipt-date {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        min-width: 90px;
+
+        @media (min-width: 768px) {
+          font-size: 16px;
+        }
+      }
+
+      .receipt-store {
+        flex-grow: 1;
+        margin-left: 20px;
+        font-size: 14px;
+
+        @media (min-width: 768px) {
+          font-size: 16px;
+        }
+      }
+
+      .receipt-amount {
+        font-weight: 500;
+        font-size: 14px;
+
+        @media (min-width: 768px) {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+.voice-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #E53935;
+  border: none;
+  color: white;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  @media (min-width: 768px) {
+    &:hover {
+      transform: translateY(-2px);
+      background-color: darken(#E53935, 5%);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
