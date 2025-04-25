@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Chat Assistant</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="chat-container">
+      <div class="messages" #messagesContainer>
+        <div *ngFor="let message of messages"
+             [class.user-message]="message.sender === 'user'"
+             [class.bot-message]="message.sender === 'bot'"
+             class="message">
+          {{message.text}}
+          <span class="timestamp">{{message.timestamp | date:'shortTime'}}</span>
+        </div>
+      </div>
+      <div class="input-container">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Type your message</mat-label>
+          <input matInput [(ngModel)]="newMessage" (keyup.enter)="sendMessage()">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
