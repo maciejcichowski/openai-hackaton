@@ -177,28 +177,30 @@
   }
 </style>
 
-<div class="dashboard-container">
-  <mat-toolbar color="primary">
-    <span>Expenses Tracker</span>
-    <span class="spacer"></span>
-  </mat-toolbar>
+<div class="dashboard-container" [class.welcome-page]="isWelcomePage">
+  <ng-container *ngIf="!isWelcomePage">
+    <mat-toolbar color="primary">
+      <span>Expenses Tracker</span>
+      <span class="spacer"></span>
+    </mat-toolbar>
 
-  <mat-toolbar class="secondary-toolbar">
-    <button mat-button routerLink="/upload" routerLinkActive="active">
-      <mat-icon>upload</mat-icon>
-      Upload Receipt
-    </button>
-    <button mat-button routerLink="/receipts" routerLinkActive="active">
-      <mat-icon>receipt</mat-icon>
-      Receipts
-    </button>
-    <button mat-button routerLink="/chat" routerLinkActive="active">
-      <mat-icon>chat</mat-icon>
-      Chat
-    </button>
-  </mat-toolbar>
+    <mat-toolbar class="secondary-toolbar">
+      <button mat-button routerLink="/upload" routerLinkActive="active">
+        <mat-icon>upload</mat-icon>
+        Upload Receipt
+      </button>
+      <button mat-button routerLink="/receipts" routerLinkActive="active">
+        <mat-icon>receipt</mat-icon>
+        Receipts
+      </button>
+      <button mat-button routerLink="/chat" routerLinkActive="active">
+        <mat-icon>chat</mat-icon>
+        Chat
+      </button>
+    </mat-toolbar>
+  </ng-container>
 
-  <div class="content-container">
+  <div class="content-container" [class.no-padding]="isWelcomePage">
     <router-outlet></router-outlet>
   </div>
 </div>
