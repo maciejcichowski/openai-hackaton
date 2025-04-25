@@ -45,11 +45,6 @@ public class SemanticKernelService(
             Think step by step about what information you need to retrieve to answer the question.
             ";
 
-        /*var arguments = new KernelArguments
-        {
-            ["question"] = 
-        };*/
-
         var history = new ChatHistory();
 
         var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
@@ -121,6 +116,9 @@ public class SemanticKernelService(
             string keyword)
         {
             var receipt = await _receiptService.GetLastReceiptContainingKeyword(keyword);
+            
+            if(receipt == null)
+                return "No receipts found";
             
             var sb = new StringBuilder();
             sb.AppendLine($"Spending on {receipt.PurchaseDate.ToShortDateString()}: {receipt.TotalAmount:C}");
