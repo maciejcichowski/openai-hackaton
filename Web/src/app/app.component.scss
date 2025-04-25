@@ -15,11 +15,6 @@
   margin-bottom: 16px;
 }
 
-.dark-theme .secondary-toolbar {
-  background-color: #424242;
-  color: white;
-}
-
 button[mat-button] {
   display: flex;
   align-items: center;
@@ -32,10 +27,6 @@ button[mat-button] {
 
 .active {
   background-color: rgba(0, 0, 0, 0.04);
-}
-
-.dark-theme .active {
-  background-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 600px) {
