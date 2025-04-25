@@ -177,8 +177,8 @@
   }
 </style>
 
-<div class="dashboard-container" [class.welcome-page]="isWelcomePage">
-  <ng-container *ngIf="!isWelcomePage">
+<div class="dashboard-container" [class.full-screen-page]="fullScreenPage">
+  <ng-container *ngIf="!fullScreenPage">
     <mat-toolbar color="primary">
       <span>Expenses Tracker</span>
       <span class="spacer"></span>
@@ -200,7 +200,7 @@
     </mat-toolbar>
   </ng-container>
 
-  <div class="content-container" [class.no-padding]="isWelcomePage">
+  <div class="content-container" [class.no-padding]="fullScreenPage">
     <router-outlet></router-outlet>
   </div>
 </div>
