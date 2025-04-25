@@ -1,0 +1,246 @@
+@use "sass:color";
+
+body {
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #000000;
+  color: white;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 40px;
+  }
+}
+
+.welcome-title {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0 0 20px 0;
+
+  @media (min-width: 768px) {
+    font-size: 32px;
+    margin: 0 0 30px 0;
+  }
+}
+
+// Voice Input Section
+.voice-input-section {
+  background-color: #1E1E1E;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+  }
+
+  .voice-input-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-left: 12px;
+
+    i {
+      font-size: 24px;
+      color: #ffffff;
+
+      @media (min-width: 768px) {
+        font-size: 28px;
+      }
+    }
+  }
+
+  .voice-input-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+
+    .voice-input-title {
+      font-size: 16px;
+      font-weight: 500;
+
+      @media (min-width: 768px) {
+        font-size: 20px;
+      }
+    }
+
+    .voice-input-subtitle {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+
+      @media (min-width: 768px) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Action Section
+.action-section {
+  margin-bottom: 24px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 40px;
+  }
+
+  h2 {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 12px 0;
+
+    @media (min-width: 768px) {
+      font-size: 16px;
+      margin: 0 0 20px 0;
+    }
+  }
+
+  .action-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+
+    @media (min-width: 768px) {
+      gap: 20px;
+    }
+
+    .action-button {
+      background-color: #1E1E1E;
+      border: none;
+      border-radius: 8px;
+      padding: 16px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      @media (min-width: 768px) {
+        padding: 24px;
+        border-radius: 12px;
+        gap: 12px;
+
+        &:hover {
+          transform: translateY(-2px);
+          background-color: #2A2A2A;
+        }
+      }
+
+      &.upload-button {
+        background-color: #E53935;
+
+        &:hover {
+          background-color: darken(#E53935, 5%);
+        }
+      }
+
+      i {
+        font-size: 20px;
+
+        @media (min-width: 768px) {
+          font-size: 32px;
+        }
+      }
+
+      span {
+        font-size: 12px;
+
+        @media (min-width: 768px) {
+          font-size: 16px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+// Category Section
+.category-section {
+  h2 {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 12px 0;
+
+    @media (min-width: 768px) {
+      font-size: 16px;
+      margin: 0 0 20px 0;
+    }
+  }
+
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    @media (min-width: 768px) {
+      gap: 12px;
+    }
+
+    .category-item {
+      background-color: #1E1E1E;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      @media (min-width: 768px) {
+        padding: 20px;
+        border-radius: 12px;
+        gap: 24px;
+
+        &:hover {
+          background-color: #2A2A2A;
+        }
+      }
+
+      i {
+        font-size: 20px;
+        width: 24px;
+        text-align: center;
+
+        @media (min-width: 768px) {
+          font-size: 24px;
+          width: 32px;
+        }
+      }
+
+      .category-name {
+        flex: 1;
+        font-size: 14px;
+
+        @media (min-width: 768px) {
+          font-size: 16px;
+        }
+      }
+
+      .category-amount {
+        font-size: 14px;
+        font-weight: 500;
+
+        @media (min-width: 768px) {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}

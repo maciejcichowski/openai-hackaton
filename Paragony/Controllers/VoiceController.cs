@@ -7,15 +7,18 @@ namespace Paragony.Controllers;
 [Route("api/[controller]")]
 public class VoiceController : ControllerBase
 {
-    private readonly IVoiceProcessingService _voiceService;
+    private readonly IVoiceTranscriptionService _voiceService;
     private readonly ISemanticKernelService _semanticService;
+    private readonly ITextToVoiceService _textToVoiceService;
 
     public VoiceController(
-        IVoiceProcessingService voiceService,
-        ISemanticKernelService semanticService)
+        IVoiceTranscriptionService voiceService,
+        ISemanticKernelService semanticService,
+        ITextToVoiceService textToVoiceService)
     {
         _voiceService = voiceService;
         _semanticService = semanticService;
+        _textToVoiceService = textToVoiceService;       
     }
 
     [HttpPost("process")]
@@ -37,6 +40,24 @@ public class VoiceController : ControllerBase
             Transcription = transcription,
             Answer = answer
         });
+    }
+    
+    [HttpPost("generate-audio")]
+    public async Task<IActionResult> GenerateAudio([FromBody] TextToSpeechRequest request)
+    {
+        if (string.IsNullOrEmpty(request.Text))
+        {
+            return BadRequest("Text is required");
+        }
+
+        byte[] audioData = await _textToVoiceService.GenerateAudio(request.Text);
+        
+        return File(audioData, "audio/mpeg", "speech.mp3");
+    }
+
+    public class TextToSpeechRequest
+    {
+        public string Text { get; set; }
     }
 
     public class VoiceRequestDto

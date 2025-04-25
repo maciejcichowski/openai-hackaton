@@ -22,7 +22,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register services
 builder.Services.AddScoped<IReceiptService, ReceiptService>();
 builder.Services.AddScoped<IOpenAIService, OpenAiService>();
-builder.Services.AddScoped<IVoiceProcessingService, VoiceProcessingService>();
+builder.Services.AddScoped<IVoiceTranscriptionService, VoiceTranscriptionService>();
+builder.Services.AddScoped<ITextToVoiceService, TextToVoiceService>();
 builder.Services.AddScoped<ISemanticKernelService, SemanticKernelService>();
 
 // Add CORS
