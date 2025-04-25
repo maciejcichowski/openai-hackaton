@@ -12,8 +12,8 @@ using Paragony.Data;
 namespace Paragony.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250423195159_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250425192153_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
