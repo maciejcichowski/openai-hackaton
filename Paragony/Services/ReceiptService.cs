@@ -21,6 +21,25 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
         // Store the image file name in the receipt
         receipt.ImagePath = imageName;
 
+        var categories = await context.Categories.ToListAsync();
+
+        foreach (var item in receipt.Items)
+        {
+            var category = categories.FirstOrDefault(c => c.Name == item.CategoryName);
+
+            if (category == null)
+            {
+                category = new Category
+                {
+                    Name = item.CategoryName,
+                };
+                await context.Categories.AddAsync(category);
+                await context.SaveChangesAsync();
+            }
+
+            item.CategoryId = category.Id;
+        }
+
         // Save to database
         context.Receipts.Add(receipt);
         await context.SaveChangesAsync();
@@ -32,6 +51,7 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
     {
         return await context.Receipts
             .Include(r => r.Items)
+            .ThenInclude(i => i.Category)
             .OrderByDescending(r => r.PurchaseDate)
             .ToListAsync();
     }
@@ -40,13 +60,14 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
     {
         return await context.Receipts
             .Include(x => x.Items)
+            .ThenInclude(i => i.Category)
             .FirstOrDefaultAsync(r => r.Id == id) ?? throw new KeyNotFoundException("Receipt not found");
     }
 
     public async Task<decimal> GetSpendingByCategory(string category, DateOnly? startDate, DateOnly? endDate)
     {
         var query = context.ReceiptItems
-            .Where(item => item.Category == category);
+            .Where(item => item.Category.Name == category);
 
         if (startDate.HasValue)
             query = query.Where(item => item.Receipt.PurchaseDate >= startDate.Value);
@@ -68,8 +89,9 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
     {
         return await context.Receipts
             .Include(r => r.Items)
+            .ThenInclude(i => i.Category)
             .Where(r => r.StoreName.Contains(query) ||
-                        r.Items.Any(i => i.Name.Contains(query) || i.Category.Contains(query)))
+                        r.Items.Any(i => i.Name.Contains(query) || i.Category.Name.Contains(query)))
             .ToListAsync();
     }
 
@@ -77,8 +99,9 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
     {
         return await context.Receipts
             .Include(r => r.Items)
+            .ThenInclude(i => i.Category)
             .Where(r => r.StoreName.Contains(query) ||
-                        r.Items.Any(i => i.Name.Contains(query) || i.Category.Contains(query)))
+                        r.Items.Any(i => i.Name.Contains(query) || i.Category.Name.Contains(query)))
             .OrderByDescending(r => r.PurchaseDate)
             .FirstOrDefaultAsync();
     }
