@@ -10,4 +10,5 @@ public interface IReceiptService
     Task<decimal> GetSpendingByCategory(string category, DateOnly? startDate, DateOnly? endDate);
     Task<decimal> GetSpendingByDate(DateOnly date);
     Task<List<Receipt>> SearchReceipts(string query);
+    Task<Receipt?> GetLastReceiptContainingKeyword(string query);
 }
