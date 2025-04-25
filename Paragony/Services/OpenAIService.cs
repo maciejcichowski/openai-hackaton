@@ -31,29 +31,83 @@ public class OpenAiService : IOpenAIService
                 ChatMessageContentPart.CreateTextPart(
                     "Analyze this receipt image and extract all the information in JSON format"),
                 ChatMessageContentPart.CreateTextPart(
-                    "Categorize each grocery and shopping items. The available categories are: Jedzenie, Chemia, Elektronika, Ubrania, Dom."),
+                    "Categorize each grocery and shopping items. The available categories are: Jedzenie, Chemia, Elektronika, Ubrania, Dom, Alkohol, Inne."),
                 ChatMessageContentPart.CreateImagePart(imageData, "image/jpeg"))
         ];
 
         var generator = new JSchemaGenerator();
-        var schema = generator.Generate(typeof(Receipt));
+        var schema = """
+                     {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/receipt.schema.json",
+  "title": "Receipt",
+  "type": "object",
+
+  "properties": {
+    "StoreName":     { "type": ["string", "null"] },
+    "PurchaseDate":  { "type": "string", "null"] },
+    "TotalAmount":   { "type": "number" },
+    "ReceiptNumber": { "type": ["string", "null"] },
+    "CreatedAt":     { "type": "string", "null"] },
+    "Items": {
+      "type": ["array", "null"],
+      "items": { "$ref": "#/definitions/ReceiptItem" }
+    }
+  },
+
+  "required": [
+    "StoreName",
+    "PurchaseDate",
+    "TotalAmount",
+    "ReceiptNumber",
+    "CreatedAt",
+    "Items"
+  ],
+  "additionalProperties": false,
+
+  "definitions": {
+    "ReceiptItem": {
+      "type": "object",
+      "title": "Receipt item",
+      "properties": {
+        "Name":      { "type": ["string", "null"] },
+        "Price":     { "type": "number" },
+        "Quantity":  { "type": "number" },
+        "Category":  { "type": ["string", "null"] }
+      },
+      "required": [
+        "Name",
+        "Price",
+        "Quantity",
+        "Category"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+""";
+            
+            //generator.Generate(typeof(Receipt));
 
         ChatCompletionOptions options = new()
         {
             ResponseFormat = ChatResponseFormat.CreateJsonSchemaFormat(
-                jsonSchemaFormatName: "ReceiptData",
+                jsonSchemaFormatName: "json_schema",
                 jsonSchema: BinaryData.FromString(schema.ToString()),
-                jsonSchemaIsStrict: true),
+                jsonSchemaIsStrict: true
+                
+                ),
+            
             MaxOutputTokenCount = 2000
         };
 
         ChatCompletion completion = await _client.CompleteChatAsync(messages, options);
 
-        using var structurizedResponse = JsonDocument.Parse(completion.Content[0].Text);
+        //using var structurizedResponse = JsonDocument.Parse(completion.Content[0].Text);
 
-        if (structurizedResponse is null) throw new Exception("Invalid response");
+        //if (structurizedResponse is null) throw new Exception("Invalid response");
 
-        var response = structurizedResponse.Deserialize<Receipt>();
+        var response = JsonSerializer.Deserialize<Receipt>(completion.Content[0].Text);
         
         return response ?? throw new Exception("Invalid response");
     }
