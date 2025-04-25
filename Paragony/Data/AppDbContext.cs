@@ -23,7 +23,9 @@ public class AppDbContext : DbContext
             new Category { Id = 2, Name = "Chemia", Description = "Środki czystości i higieny" },
             new Category { Id = 3, Name = "Elektronika", Description = "Urządzenia elektroniczne" },
             new Category { Id = 4, Name = "Ubrania", Description = "Odzież i obuwie" },
-            new Category { Id = 5, Name = "Dom", Description = "Artykuły domowe" }
+            new Category { Id = 5, Name = "Dom", Description = "Artykuły domowe" },
+            new Category { Id = 6, Name = "Alkohol", Description = "Alkohol" }    ,
+            new Category { Id = 7, Name = "Inne", Description = "Inne" }   
         );
     }
 }
