@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ReceiptService {
-  private apiUrl = 'api/receipts'; // dostosuj URL do swojego API
+  private apiUrl = 'http://localhost:5063/api/receipts';
 
   constructor(private http: HttpClient) {}
 
   uploadReceipt(base64File: string): Observable<any> {
-    return this.http.post(this.apiUrl, { file: base64File });
+    return this.http.post(`${this.apiUrl}/upload`, { base64Image: base64File });
   }
 }
