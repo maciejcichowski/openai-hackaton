@@ -30,4 +30,8 @@ export class DashboardComponent {
   navigateToUpload() {
     this.router.navigate(['/upload']);
   }
+
+  navigateToReceipts() {
+    this.router.navigate(['/receipts']);
+  }
 }

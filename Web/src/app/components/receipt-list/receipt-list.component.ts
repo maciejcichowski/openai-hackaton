@@ -1,32 +1,46 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import { ChatBoxComponent } from '../chat-box/chat-box.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 interface Receipt {
-  id: number;
-  date: Date;
+  date: string;
+  store: string;
   amount: number;
-  merchant: string;
-  imageUrl: string;
 }
 
 @Component({
   selector: 'app-receipt-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCardModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './receipt-list.component.html',
   styleUrls: ['./receipt-list.component.scss']
 })
 export class ReceiptListComponent {
-  displayedColumns: string[] = ['date', 'merchant', 'amount', 'actions'];
+  dateRange: string = '01.04-01.05.2025';
+
+  constructor(private dialog: MatDialog) {}
+
+  openVoiceChat() {
+    const dialogRef = this.dialog.open(ChatBoxComponent, {
+      width: '90%',
+      height: '80%',
+      panelClass: 'voice-chat-dialog',
+      data: { startRecording: true }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Chat dialog closed');
+    });
+  }
+
   receipts: Receipt[] = [
-    {
-      id: 1,
-      date: new Date('2024-04-25'),
-      amount: 150.50,
-      merchant: 'Sklep XYZ',
-      imageUrl: 'assets/receipt1.jpg'
-    }
+    { date: '23-04-2025', store: 'Lidl', amount: 123.46 },
+    { date: '23-04-2025', store: 'Rossmann', amount: 123.46 },
+    { date: '22-04-2025', store: 'Biedronka', amount: 123.46 },
+    { date: '23-04-2025', store: 'Lidl', amount: 123.46 },
+    { date: '23-04-2025', store: 'Rossmann', amount: 123.46 },
+    { date: '22-04-2025', store: 'Biedronka', amount: 123.46 }
   ];
 }
