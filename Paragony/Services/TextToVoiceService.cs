@@ -5,7 +5,7 @@ namespace Paragony.Services;
 
 public class TextToVoiceService : ITextToVoiceService
 {
-    AudioClient _client;
+    private readonly AudioClient _client;
     
     public TextToVoiceService(IConfiguration configuration)
     {
