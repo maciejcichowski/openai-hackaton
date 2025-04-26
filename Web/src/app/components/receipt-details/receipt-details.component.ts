@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ReceiptService } from '../../services/receipt.service';
 import { Receipt } from '../../models/receipt.model';
 import { BackButtonComponent } from '../shared/back-button/back-button.component';
+import { VoiceButtonComponent } from '../shared/voice-button/voice-button.component';
 
 @Component({
   selector: 'app-receipt-details',
   standalone: true,
-  imports: [CommonModule, BackButtonComponent],
+  imports: [CommonModule, BackButtonComponent, VoiceButtonComponent],
   templateUrl: './receipt-details.component.html',
   styleUrls: ['./receipt-details.component.scss']
 })
