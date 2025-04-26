@@ -38,27 +38,29 @@
 
   <!-- Category Summary Section -->
   <div class="category-section">
-    <h2>Category summary</h2>
+    <div class="category-header">
+      <h2>Category summary</h2>
+      <div class="date-range">
+        <mat-form-field appearance="fill" class="dark-theme">
+          <mat-label>Date range</mat-label>
+          <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+    </div>
+    
     <div class="category-list">
-      <div class="category-item">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="category-name">Food</span>
-        <span class="category-amount">123,46</span>
+      <div class="category-item" *ngFor="let category of dashboardSummary?.categories">
+        <i class="fas" [ngClass]="getCategoryIcon(category.name)"></i>
+        <span class="category-name">{{ category.name }}</span>
+        <span class="category-amount">{{ category.total | number:'1.2-2' }}</span>
       </div>
-      <div class="category-item">
-        <i class="fas fa-heartbeat"></i>
-        <span class="category-name">Health</span>
-        <span class="category-amount">123,46</span>
-      </div>
-      <div class="category-item">
-        <i class="fas fa-car"></i>
-        <span class="category-name">Cars</span>
-        <span class="category-amount">123,46</span>
-      </div>
-      <div class="category-item">
-        <i class="fas fa-bread-slice"></i>
-        <span class="category-name">Bread</span>
-        <span class="category-amount">123,46</span>
+      <div class="no-data" *ngIf="!dashboardSummary?.categories?.length">
+        No data available for selected date range
       </div>
     </div>
   </div>
