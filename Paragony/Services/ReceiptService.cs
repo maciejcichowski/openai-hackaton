@@ -47,11 +47,18 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
         return receipt;
     }
 
-    public async Task<List<Receipt>> GetAllReceipts()
+    public async Task<List<Receipt>> GetAllReceipts(DateOnly? datefrom, DateOnly? dateTo)
     {
-        return await context.Receipts
+        var query = context.Receipts
             .Include(r => r.Items)
             .ThenInclude(i => i.Category)
+            .AsQueryable();
+
+        if (datefrom.HasValue) query = query.Where(r => r.PurchaseDate >= datefrom.Value);
+
+        if (dateTo.HasValue) query = query.Where(r => r.PurchaseDate <= dateTo.Value);
+
+        return await query
             .OrderByDescending(r => r.PurchaseDate)
             .ToListAsync();
     }

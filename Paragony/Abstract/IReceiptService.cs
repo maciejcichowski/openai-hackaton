@@ -5,7 +5,7 @@ namespace Paragony.Abstract;
 public interface IReceiptService
 {
     Task<Receipt> AddReceiptFromImage(string base64Image);
-    Task<List<Receipt>> GetAllReceipts();
+    Task<List<Receipt>> GetAllReceipts(DateOnly? startDate, DateOnly? endDate);
     Task<Receipt> GetReceiptById(Guid id);
     Task<decimal> GetSpendingByCategory(string category, DateOnly? startDate, DateOnly? endDate);
     Task<decimal> GetSpendingByDate(DateOnly date);

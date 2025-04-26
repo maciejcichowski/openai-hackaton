@@ -42,6 +42,7 @@ public class SemanticKernelService(
             You are a helpful assistant that helps users get information about their purchase history and receipts.
             Use the ReceiptQueries functions to get the data the user is asking for.
             If you cannot find the information in the item name, try categories and dates.
+            Remember that Price from database is total price (multiplied by quantity).
 
             User's question: {question}
             
@@ -52,7 +53,7 @@ public class SemanticKernelService(
 
         var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
 
-        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new() 
+        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
         {
             FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
         };
@@ -63,38 +64,38 @@ public class SemanticKernelService(
             history,
             executionSettings: openAIPromptExecutionSettings,
             kernel: _kernel);
-        
+
         return result.Content;
     }
 
     public async Task<string> ProcessChat(ChatHistoryWithPrompt chatHistoryWithPrompt)
     {
         InitializeKernel();
-        
+
         var history = new ChatHistory();
         foreach (var chat in chatHistoryWithPrompt.ChatHistory)
         {
             if(!string.IsNullOrWhiteSpace(chat.UserMessage))
                 history.AddUserMessage(chat.UserMessage);
-            
+
             if(!string.IsNullOrWhiteSpace(chat.BotMessage))
-                history.AddAssistantMessage(chat.BotMessage); 
+                history.AddAssistantMessage(chat.BotMessage);
         }
-        
+
         var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
 
-        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new() 
+        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
         {
             FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
         };
-        
+
         history.AddUserMessage(chatHistoryWithPrompt.Prompt);
 
         var result = await chatCompletionService.GetChatMessageContentAsync(
             history,
             executionSettings: openAIPromptExecutionSettings,
             kernel: _kernel);
-        
+
         return result.Content;
     }
 
@@ -141,7 +142,7 @@ public class SemanticKernelService(
             var amount = await _receiptService.GetSpendingByDate(parsedDate);
             return $"Spending on {parsedDate.ToShortDateString()}: {amount:C}";
         }
-        
+
         [KernelFunction]
         [Description("Get get most recent recipt containing item by keyword")]
         public async Task<string> GetLastSpendingByKeyword(
@@ -149,13 +150,13 @@ public class SemanticKernelService(
             string keyword)
         {
             var receipt = await _receiptService.GetLastReceiptContainingKeyword(keyword);
-            
+
             if(receipt == null)
                 return "No receipts found";
-            
+
             var sb = new StringBuilder();
             sb.AppendLine($"Spending on {receipt.PurchaseDate.ToShortDateString()}: {receipt.TotalAmount:C}");
-            
+
             foreach (var receiptItem in receipt.Items)
             {
                 sb.AppendLine(
