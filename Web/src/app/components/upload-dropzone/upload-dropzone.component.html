@@ -1,0 +1,49 @@
+<div class="welcome-container">
+  <button class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="content">
+    <h1>Dodaj paragon</h1>
+
+    <div
+      class="dropzone-container"
+      [class.uploading]="isUploading"
+      (click)="fileInput.click()"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event)">
+
+      <div class="upload-icon">
+        @if (isUploading) {
+          <mat-spinner diameter="48"></mat-spinner>
+        } @else {
+          <mat-icon [style.fontSize.px]="48" [style.width.px]="48" [style.height.px]="48">
+            upload_file
+          </mat-icon>
+        }
+      </div>
+
+      <p class="upload-text">
+        @if (isUploading) {
+          Przesyłanie pliku...
+        } @else {
+          Kliknij lub upuść plik tutaj
+        }
+      </p>
+    </div>
+
+    <button
+      class="add-receipt-button"
+      (click)="fileInput.click()"
+      [disabled]="isUploading">
+      Wybierz plik
+    </button>
+
+    <input
+      #fileInput
+      type="file"
+      (change)="onFileSelected($event)"
+      accept="image/*,.pdf"
+      style="display: none" />
+  </div>
+</div>

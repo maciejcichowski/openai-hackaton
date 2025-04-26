@@ -1,0 +1,111 @@
+.welcome-container {
+  min-height: 100vh;
+  background-color: #000000;
+  color: white;
+  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px;
+  cursor: pointer;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 16px;
+  margin-top: 48px;
+
+  h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 32px;
+  }
+}
+
+.dropzone-container {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 3/4;
+  background-color: #1E1E1E;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 32px;
+
+  &:hover {
+    background-color: #2A2A2A;
+  }
+
+  .upload-icon {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upload-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.add-receipt-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #E53935;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #F44336;
+  }
+
+  &:active {
+    background-color: #D32F2F;
+  }
+}
+
+::ng-deep .mat-mdc-snack-bar-container.error-snackbar {
+  background-color: #f44336 !important;
+
+  .mdc-snackbar__surface {
+    background-color: #f44336 !important;
+  }
+
+  .mdc-snackbar__label {
+    color: white !important;
+  }
+}

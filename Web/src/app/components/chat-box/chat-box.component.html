@@ -1,0 +1,38 @@
+<div class="chat-box-container">
+  <div class="chat-header">
+    <h2>AI Chat</h2>
+    <button mat-icon-button (click)="closeDialog()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="messages-container">
+    <div *ngFor="let message of messages" 
+         [ngClass]="{'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot'}"
+         class="message">
+      <div class="message-content">{{ message.text }}</div>
+      <div class="message-timestamp">{{ message.timestamp | date:'shortTime' }}</div>
+    </div>
+  </div>
+
+  <div class="recording-status" *ngIf="isRecording">
+    <div class="recording-indicator"></div>
+    <span>Recording...</span>
+    <button mat-raised-button color="warn" (click)="stopRecording()">
+      Stop Recording
+    </button>
+  </div>
+
+  <div class="chat-input">
+    <mat-form-field appearance="outline" class="message-input">
+      <input matInput [(ngModel)]="newMessage" placeholder="Type a message..."
+             (keyup.enter)="sendMessage()" [disabled]="isRecording || isProcessing">
+      <button matSuffix mat-icon-button (click)="sendMessage()" [disabled]="isRecording || !newMessage.trim() || isProcessing">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </mat-form-field>
+    <button mat-fab color="primary" (click)="startRecording()" [disabled]="isRecording || isProcessing">
+      <i class="fas fa-microphone"></i>
+    </button>
+  </div>
+</div>
