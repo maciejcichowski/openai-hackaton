@@ -10,13 +10,13 @@
     </div>
   </div>
 
-  <div class="receipts">
+  <div class="receipts-list">
     <div class="receipt-item" *ngFor="let receipt of receipts" (click)="navigateToDetails(receipt)">
-      <div class="receipt-details">
-        <div class="receipt-date">{{receipt.date}}</div>
-        <div class="receipt-store">{{receipt.store}}</div>
-        <div class="receipt-amount">{{receipt.amount | number:'1.2-2'}}</div>
+      <div class="receipt-info">
+        <div class="store-name">{{ receipt.storeName }}</div>
+        <div class="receipt-date">{{ receipt.purchaseDate | date:'dd-MM-yyyy' }}</div>
       </div>
+      <div class="receipt-amount">{{ receipt.totalAmount | number:'1.2-2' }} zł</div>
     </div>
   </div>
 
