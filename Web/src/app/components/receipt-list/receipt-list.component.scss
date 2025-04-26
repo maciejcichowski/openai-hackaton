@@ -141,3 +141,15 @@ table {
     transform: scale(0.95);
   }
 }
+
+.no-data-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+  background-color: #1E1E1E;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
