@@ -8,20 +8,20 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ReceiptService {
-  private apiUrl = `${environment.apiUrl}/api/receipts`;
+  private apiUrl = `${environment.apiUrl}/api`;
 
   constructor(private http: HttpClient) {}
 
   getReceipts(): Observable<Receipt[]> {
-    return this.http.get<Receipt[]>(this.apiUrl);
+    return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`);
   }
 
   getReceipt(id: string): Observable<Receipt> {
-    return this.http.get<Receipt>(`${this.apiUrl}/${id}`);
+    return this.http.get<Receipt>(`${this.apiUrl}/receipts/${id}`);
   }
 
   getReceiptImage(id: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/${id}/image`, { responseType: 'blob' });
+    return this.http.get(`${this.apiUrl}/receipts/${id}/image`, { responseType: 'blob' });
   }
 
   uploadReceipt(base64File: string): Observable<any> {
