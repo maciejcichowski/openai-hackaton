@@ -35,7 +35,7 @@ public class OpenAiService : IOpenAIService
         [
             new UserChatMessage(
                 ChatMessageContentPart.CreateTextPart(
-                    "You are a helpful assistant specialized in analyzing receipt images. Extract structured data from the receipt including: store name, date, receipt number, total amount, and all items with their quantities and prices. Format the output as JSON."),
+                    "You are a helpful assistant specialized in analyzing receipt images. Extract structured data from the receipt including: store name, date, receipt number, total amount, and all items with their quantities and prices. Format the output as JSON. Parse purchase date only as a Date if you can't find the date make your best guess."),
                 ChatMessageContentPart.CreateTextPart(
                     "Analyze this receipt image and extract all the information in JSON format"),
                 ChatMessageContentPart.CreateTextPart(
