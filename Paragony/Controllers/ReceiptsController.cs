@@ -9,9 +9,9 @@ namespace Paragony.Controllers;
 public class ReceiptsController(IReceiptService receiptService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<Receipt>>> GetAllReceipts()
+    public async Task<ActionResult<List<Receipt>>> GetAllReceipts([FromQuery] DateOnly? dateFrom, [FromQuery] DateOnly? dateTo)
     {
-        var receipts = await receiptService.GetAllReceipts();
+        var receipts = await receiptService.GetAllReceipts(dateFrom, dateTo);;
         return Ok(receipts);
     }
 
