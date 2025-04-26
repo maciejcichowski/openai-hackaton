@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
+<<<<<<< Updated upstream
 import { HttpClient, HttpParams } from '@angular/common/http';
+=======
+import { HttpClient, HttpResponse } from '@angular/common/http';
+>>>>>>> Stashed changes
 import { Observable } from 'rxjs';
 import { Receipt } from '../models/receipt.model';
 import { environment } from '../../environments/environment';
+import { switchMap, tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -45,11 +50,25 @@ export class ReceiptService {
     return this.http.post(`${this.apiUrl}/receipts/upload`, { base64Image: base64File });
   }
 
+  transcribeAudio(base64Audio: string): Observable<string> {
+    return this.http.post<{transcription: string}>(`${this.apiUrl}/voice/transcribe`, { base64Audio })
+      .pipe(map(response => response.transcription));
+  }
+
   sendVoiceRecording(base64Audio: string): Observable<any> {
     const payload = {
       base64Audio: base64Audio
     };
 
     return this.http.post(`${this.apiUrl}/voice/process`, payload);
+  }
+
+  getVoiceRecording(text: string): Observable<HttpResponse<Blob>> {
+    return this.http.post(`${this.apiUrl}/voice/generate-audio`, {
+      text
+    }, {
+      observe: 'response',
+      responseType: 'blob'
+    });
   }
 }
