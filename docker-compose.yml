@@ -1,4 +1,5 @@
-name: openai-hackaton
+name: inwedo-openai-hackaton
+
 services:
   postgres:
     image: postgres
@@ -7,4 +8,29 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: mysecretpassword
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./Web
+      dockerfile: Dockerfile
+    container_name: angular-frontend
+    ports:
+      - "4300:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./Paragony
+      dockerfile: Dockerfile
+    container_name: dotnet-api
+    ports:
+      - "5063:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=Receipts;Username=postgres;Password=mysecretpassword
+    depends_on:
+      - postgres
     restart: unless-stopped

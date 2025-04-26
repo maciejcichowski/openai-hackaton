@@ -30,13 +30,12 @@ try
     {
         options.AddPolicy("AllowAngularApp", builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            builder.AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
+                .AllowAnyHeader();
         });
     });
-    
+
     var app = builder.Build();
     app.UseExceptionHandler(errorApp =>
     {
