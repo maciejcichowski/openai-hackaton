@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-<<<<<<< Updated upstream
-import { HttpClient, HttpParams } from '@angular/common/http';
-=======
-import { HttpClient, HttpResponse } from '@angular/common/http';
->>>>>>> Stashed changes
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Receipt } from '../models/receipt.model';
 import { environment } from '../../environments/environment';
