@@ -4,6 +4,9 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Paragony.Abstract;
+using Paragony.Models;
+using ChatHistory = Microsoft.SemanticKernel.ChatCompletion.ChatHistory;
+
 // ReSharper disable UnusedMember.Local
 
 namespace Paragony.Services;
@@ -56,7 +59,37 @@ public class SemanticKernelService(
 
         history.AddUserMessage(prompt);
 
+        var result = await chatCompletionService.GetChatMessageContentAsync(
+            history,
+            executionSettings: openAIPromptExecutionSettings,
+            kernel: _kernel);
         
+        return result.Content;
+    }
+
+    public async Task<string> ProcessChat(ChatHistoryWithPrompt chatHistoryWithPrompt)
+    {
+        InitializeKernel();
+        
+        var history = new ChatHistory();
+        foreach (var chat in chatHistoryWithPrompt.ChatHistory)
+        {
+            if(!string.IsNullOrWhiteSpace(chat.UserMessage))
+                history.AddUserMessage(chat.UserMessage);
+            
+            if(!string.IsNullOrWhiteSpace(chat.BotMessage))
+                history.AddAssistantMessage(chat.BotMessage); 
+        }
+        
+        var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
+
+        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new() 
+        {
+            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+        };
+        
+        history.AddUserMessage(chatHistoryWithPrompt.Prompt);
+
         var result = await chatCompletionService.GetChatMessageContentAsync(
             history,
             executionSettings: openAIPromptExecutionSettings,
