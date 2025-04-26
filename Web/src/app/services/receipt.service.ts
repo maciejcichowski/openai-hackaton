@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Receipt } from '../models/receipt.model';
 import { environment } from '../../environments/environment';
@@ -12,8 +12,25 @@ export class ReceiptService {
 
   constructor(private http: HttpClient) {}
 
-  getReceipts(): Observable<Receipt[]> {
-    return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`);
+  private formatDateToDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  getReceipts(startDate?: Date | null, endDate?: Date | null): Observable<Receipt[]> {
+    let params = new HttpParams();
+
+    if (startDate) {
+      params = params.set('dateFrom', this.formatDateToDateOnly(startDate));
+    }
+
+    if (endDate) {
+      params = params.set('dateTo', this.formatDateToDateOnly(endDate));
+    }
+
+    return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`, { params });
   }
 
   getReceipt(id: string): Observable<Receipt> {
