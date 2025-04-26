@@ -36,8 +36,7 @@ try
                 .AllowCredentials();
         });
     });
-
-
+    
     var app = builder.Build();
     app.UseExceptionHandler(errorApp =>
     {

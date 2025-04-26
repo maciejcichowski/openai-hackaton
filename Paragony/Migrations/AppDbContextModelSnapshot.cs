@@ -102,7 +102,6 @@ namespace Paragony.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("ReceiptNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("StoreName")
