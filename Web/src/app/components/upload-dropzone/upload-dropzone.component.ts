@@ -64,6 +64,7 @@ export class UploadDropzoneComponent {
     const reader = new FileReader();
     reader.onload = (e: any) => {
       const base64String = e.target.result.split(',')[1];
+      e.target.value = ''
 
       this.receiptService.uploadReceipt(base64String)
         .pipe(
