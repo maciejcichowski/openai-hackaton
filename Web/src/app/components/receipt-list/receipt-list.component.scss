@@ -36,12 +36,18 @@ table {
     margin-bottom: 30px;
   }
 
-  h1 {
-    font-size: 24px;
-    margin: 0;
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 
-    @media (min-width: 768px) {
-      font-size: 32px;
+    h1 {
+      font-size: 24px;
+      margin: 0;
+
+      @media (min-width: 768px) {
+        font-size: 32px;
+      }
     }
   }
 

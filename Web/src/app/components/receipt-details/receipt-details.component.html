@@ -1,6 +1,9 @@
 <div class="receipt-details-container">
   <div class="receipt-header">
-    <h1>Receipt analysis</h1>
+    <div class="header-left">
+      <app-back-button (backClick)="goBack()"></app-back-button>
+      <h1>Receipt analysis</h1>
+    </div>
     <button class="download-button" (click)="downloadReceipt()">
       <i class="fas fa-download"></i>
     </button>

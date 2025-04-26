@@ -1,6 +1,9 @@
 <div class="receipt-list-container">
   <div class="receipt-header">
-    <h1>Receipt list</h1>
+    <div class="header-left">
+      <app-back-button (backClick)="goBack()"></app-back-button>
+      <h1>Receipt list</h1>
+    </div>
     <div class="date-range">
       <span>{{dateRange}}</span>
       <i class="fas fa-calendar"></i>

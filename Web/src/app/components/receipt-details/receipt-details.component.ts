@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatBoxComponent } from '../chat-box/chat-box.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { BackButtonComponent } from '../shared/back-button/back-button.component';
 
 interface ReceiptItem {
   name: string;
@@ -20,12 +22,15 @@ interface ReceiptDetails {
 @Component({
   selector: 'app-receipt-details',
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, BackButtonComponent],
   templateUrl: './receipt-details.component.html',
   styleUrls: ['./receipt-details.component.scss']
 })
 export class ReceiptDetailsComponent {
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   openVoiceChat() {
     const dialogRef = this.dialog.open(ChatBoxComponent, {
@@ -43,6 +48,10 @@ export class ReceiptDetailsComponent {
   downloadReceipt() {
     // Tutaj implementacja pobierania paragonu
     console.log('Downloading receipt...');
+  }
+
+  goBack() {
+    this.router.navigate(['/receipts']);
   }
 
   receipt: ReceiptDetails = {

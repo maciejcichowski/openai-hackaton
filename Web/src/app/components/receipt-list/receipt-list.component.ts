@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChatBoxComponent } from '../chat-box/chat-box.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { BackButtonComponent } from '../shared/back-button/back-button.component';
 
 interface Receipt {
   id?: number;
@@ -15,7 +16,7 @@ interface Receipt {
 @Component({
   selector: 'app-receipt-list',
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, BackButtonComponent],
   templateUrl: './receipt-list.component.html',
   styleUrls: ['./receipt-list.component.scss']
 })
@@ -44,6 +45,10 @@ export class ReceiptListComponent {
     // W rzeczywistej aplikacji użylibyśmy prawdziwego ID
     const id = 1;
     this.router.navigate(['/receipts', id]);
+  }
+
+  goBack() {
+    this.router.navigate(['/dashboard']);
   }
 
   receipts: Receipt[] = [
