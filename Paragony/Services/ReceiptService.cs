@@ -102,6 +102,14 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
             .ToListAsync();
     }
 
+    public async Task<List<ReceiptItem>> SearchSpendingsByStoreName(string query)
+    {
+        return await context.ReceiptItems
+            .Include(item => item.Receipt)
+            .Where(item => item.Receipt.StoreName.ToLower().Contains(query.ToLower()))
+            .ToListAsync();
+    }
+
     public async Task<Receipt?> GetLastReceiptContainingKeyword(string query)
     {
         return await context.Receipts
