@@ -91,8 +91,22 @@ public class SemanticKernelService(
         {
             FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
         };
+        
+        var prompt = @$"
+            You are a helpful assistant that helps users get information about their purchase history and receipts.
+            Use the ReceiptQueries functions to get the data the user is asking for.
+            If you cannot find the information in the item name, try categories and dates.
+            Remember that Price from database is total price (multiplied by quantity).
 
-        history.AddUserMessage(chatHistoryWithPrompt.Prompt);
+            User's question: {chatHistoryWithPrompt.Prompt}
+            
+            Think step by step about what information you need to retrieve to answer the question.
+
+            Add some health tips about the food user is eating based both on question and results.
+            Use the same language as the user.
+            ";
+
+        history.AddUserMessage(prompt);
 
         var result = await chatCompletionService.GetChatMessageContentAsync(
             history,
