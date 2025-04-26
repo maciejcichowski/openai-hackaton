@@ -1,3 +1,4 @@
+using Paragony.DTOs;
 using Paragony.Models;
 
 namespace Paragony.Abstract;
@@ -12,4 +13,5 @@ public interface IReceiptService
     Task<List<Receipt>> SearchReceipts(string query);
     Task<List<ReceiptItem>> SearchSpendingsByStoreName(string query);
     Task<Receipt?> GetLastReceiptContainingKeyword(string query);
+    Task<List<CategoryTotalDto>> GetCategoriesWithTotal(DateOnly? datefrom, DateOnly? dateTo);
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Paragony.Abstract;
 using Paragony.Data;
+using Paragony.DTOs;
 using Paragony.Models;
 
 namespace Paragony.Services;
@@ -61,6 +62,21 @@ public class ReceiptService(AppDbContext context, IOpenAIService openAiService) 
         return await query
             .OrderByDescending(r => r.PurchaseDate)
             .ToListAsync();
+    }
+
+    public async Task<List<CategoryTotalDto>> GetCategoriesWithTotal(DateOnly? datefrom, DateOnly? dateTo)
+    {
+        var query = context.ReceiptItems.AsQueryable();
+
+        if (datefrom.HasValue) query = query.Where(r => r.Receipt.PurchaseDate >= datefrom.Value);
+        if (dateTo.HasValue) query = query.Where(r => r.Receipt.PurchaseDate <= dateTo.Value);
+
+        return await query.Include(x => x.Category).GroupBy(r => new { r.CategoryId, CategoryName = r.Category.Name })
+            .Select(g => new CategoryTotalDto
+            {
+                Name = g.Key.CategoryName,
+                Total = g.Sum(r => r.Price)
+            }).ToListAsync();
     }
 
     public async Task<Receipt> GetReceiptById(Guid id)

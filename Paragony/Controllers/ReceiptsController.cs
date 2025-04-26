@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Paragony.Abstract;
+using Paragony.DTOs;
 using Paragony.Models;
 
 namespace Paragony.Controllers;
@@ -13,6 +14,13 @@ public class ReceiptsController(IReceiptService receiptService) : ControllerBase
     {
         var receipts = await receiptService.GetAllReceipts(dateFrom, dateTo);;
         return Ok(receipts);
+    }
+
+    [HttpGet("categories")]
+    public async Task<ActionResult<List<CategoryTotalDto>>> GetCategoriesWithTotal([FromQuery] DateOnly? dateFrom, [FromQuery] DateOnly? dateTo)
+    {
+        var categoriesWithTotal = await receiptService.GetCategoriesWithTotal(dateFrom, dateTo); ;
+        return Ok(categoriesWithTotal);
     }
 
     [HttpGet("{id}")]
