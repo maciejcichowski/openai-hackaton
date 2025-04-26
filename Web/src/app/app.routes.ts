@@ -17,7 +17,13 @@ export const routes: Routes = [
     path: 'receipts',
     loadComponent: () => import('./components/receipt-list/receipt-list.component')
       .then(m => m.ReceiptListComponent),
-    data: { fullScreen: false }
+    data: { fullScreen: true }
+  },
+  {
+    path: 'receipts/:id',
+    loadComponent: () => import('./components/receipt-details/receipt-details.component')
+      .then(m => m.ReceiptDetailsComponent),
+    data: { fullScreen: true }
   },
   {
     path: 'chat',
