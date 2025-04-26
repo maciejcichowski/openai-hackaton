@@ -1,73 +1,73 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
-import { ChatBoxComponent } from '../chat-box/chat-box.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { ReceiptService } from '../../services/receipt.service';
+import { Receipt } from '../../models/receipt.model';
 import { BackButtonComponent } from '../shared/back-button/back-button.component';
-
-interface ReceiptItem {
-  name: string;
-  price: number;
-  category: string;
-}
-
-interface ReceiptDetails {
-  store: string;
-  date: string;
-  items: ReceiptItem[];
-  total: number;
-}
 
 @Component({
   selector: 'app-receipt-details',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, BackButtonComponent],
+  imports: [CommonModule, BackButtonComponent],
   templateUrl: './receipt-details.component.html',
   styleUrls: ['./receipt-details.component.scss']
 })
-export class ReceiptDetailsComponent {
+export class ReceiptDetailsComponent implements OnInit {
+  receipt: Receipt | null = null;
+  loading = true;
+  error: string | null = null;
+
   constructor(
-    private dialog: MatDialog,
-    private router: Router
+    private route: ActivatedRoute,
+    private receiptService: ReceiptService
   ) {}
 
-  openVoiceChat() {
-    const dialogRef = this.dialog.open(ChatBoxComponent, {
-      width: '90%',
-      height: '80%',
-      panelClass: 'voice-chat-dialog',
-      data: { startRecording: true }
-    });
+  ngOnInit() {
+    const receiptId = this.route.snapshot.paramMap.get('id');
+    if (receiptId) {
+      this.loadReceipt(receiptId);
+    } else {
+      this.error = 'No receipt ID provided';
+      this.loading = false;
+    }
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Chat dialog closed');
+  loadReceipt(id: string) {
+    this.receiptService.getReceipt(id).subscribe({
+      next: (data) => {
+        this.receipt = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Failed to load receipt details';
+        this.loading = false;
+        console.error('Error loading receipt:', err);
+      }
     });
   }
 
   downloadReceipt() {
-    // Tutaj implementacja pobierania paragonu
-    console.log('Downloading receipt...');
+    if (!this.receipt?.id) return;
+
+    this.receiptService.getReceiptImage(this.receipt.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `receipt_${this.receipt?.storeName}_${this.receipt?.purchaseDate}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+      error: (err) => {
+        console.error('Error downloading receipt image:', err);
+        this.error = 'Failed to download receipt image';
+      }
+    });
   }
 
   goBack() {
-    this.router.navigate(['/receipts']);
+    window.history.back();
   }
-
-  receipt: ReceiptDetails = {
-    store: 'Biedronka',
-    date: 'April 22, 2025',
-    items: [
-      { name: 'Schabowy', price: 23.45, category: 'Food' },
-      { name: 'Bulka pozn', price: 2.34, category: 'Bread' },
-      { name: 'Something', price: 2.34, category: 'Category' },
-      { name: 'Schabowy', price: 23.45, category: 'Food' },
-      { name: 'Bulka pozn', price: 2.34, category: 'Bread' },
-      { name: 'Something', price: 2.34, category: 'Category' },
-      { name: 'Schabowy', price: 23.45, category: 'Food' },
-      { name: 'Bulka pozn', price: 2.34, category: 'Bread' },
-      { name: 'Something', price: 2.34, category: 'Category' }
-    ],
-    total: 204.56
-  };
 }

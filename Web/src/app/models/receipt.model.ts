@@ -14,5 +14,6 @@ export interface ReceiptItem {
   name: string;
   quantity: number;
   price: number;
-  category: string;
+  category: any;
+  categoryName: string;
 }

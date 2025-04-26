@@ -2,25 +2,25 @@
   <div class="receipt-header">
     <div class="header-left">
       <app-back-button (backClick)="goBack()"></app-back-button>
-      <h1>Receipt analysis</h1>
+      <h1>Receipt details</h1>
     </div>
     <button class="download-button" (click)="downloadReceipt()">
       <i class="fas fa-download"></i>
     </button>
   </div>
 
-  <div class="receipt-info">
-    <div class="info-row">
-      <span class="label">Store:</span>
-      <span class="value">{{receipt.store}}</span>
+  <div *ngIf="!loading && !error">
+    <div class="receipt-info" *ngIf="receipt">
+      <div class="info-row">
+        <span class="label">Store:</span>
+        <span class="value">{{ receipt.storeName }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Date:</span>
+        <span class="value">{{ receipt.purchaseDate | date:'dd.MM.yyyy' }}</span>
+      </div>
     </div>
-    <div class="info-row">
-      <span class="label">Date:</span>
-      <span class="value">{{receipt.date}}</span>
-    </div>
-  </div>
 
-  <div class="receipt-content">
     <div class="receipt-table-header">
       <div class="col-item">Items</div>
       <div class="col-price">Price</div>
@@ -28,20 +28,24 @@
     </div>
 
     <div class="receipt-items">
-      <div class="receipt-item" *ngFor="let item of receipt.items">
-        <div class="col-item">{{item.name}}</div>
-        <div class="col-price">{{item.price | number:'1.2-2'}}</div>
-        <div class="col-category">{{item.category}}</div>
+      <div class="receipt-item" *ngFor="let item of receipt?.items">
+        <div class="col-item">{{ item.name }}</div>
+        <div class="col-price">{{ item.price | number:'1.2-2' }} zł</div>
+        <div class="col-category">{{ item.category.description }}</div>
       </div>
+    </div>
+
+    <div class="receipt-summary">
+      <span class="label">Total:</span>
+      <span class="total">{{ receipt?.totalAmount | number:'1.2-2' }} zł</span>
     </div>
   </div>
 
-  <div class="receipt-summary">
-    <span class="label">Summary:</span>
-    <span class="total">{{receipt.total | number:'1.2-2'}} zł</span>
+  <div class="loading" *ngIf="loading">
+    Loading...
   </div>
 
-  <button class="voice-button" (click)="openVoiceChat()">
-    <i class="fas fa-microphone"></i>
-  </button>
+  <div class="error" *ngIf="error">
+    {{ error }}
+  </div>
 </div>

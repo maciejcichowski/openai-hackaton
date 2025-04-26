@@ -20,6 +20,10 @@ export class ReceiptService {
     return this.http.get<Receipt>(`${this.apiUrl}/${id}`);
   }
 
+  getReceiptImage(id: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id}/image`, { responseType: 'blob' });
+  }
+
   uploadReceipt(base64File: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/upload`, { base64Image: base64File });
   }
