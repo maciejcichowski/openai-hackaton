@@ -108,7 +108,7 @@ public class OpenAiService : IOpenAIService
 
                 ),
 
-            MaxOutputTokenCount = 2000
+            //MaxOutputTokenCount = 2000
         };
 
         ChatCompletion completion = await _client.CompleteChatAsync(messages, options);
