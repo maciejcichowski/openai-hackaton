@@ -23,6 +23,7 @@
 
     <div class="receipt-table-header">
       <div class="col-item">Items</div>
+      <div class="col-quantity">Quantity</div>
       <div class="col-price">Price</div>
       <div class="col-category">Category</div>
     </div>
@@ -30,6 +31,7 @@
     <div class="receipt-items">
       <div class="receipt-item" *ngFor="let item of receipt?.items">
         <div class="col-item">{{ item.name }}</div>
+        <div class="col-quantity">{{ item.quantity }}</div>
         <div class="col-price">{{ item.price | number:'1.2-2' }} zł</div>
         <div class="col-category">{{ item.category.description }}</div>
       </div>
