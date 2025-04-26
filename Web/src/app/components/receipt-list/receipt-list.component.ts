@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatBoxComponent } from '../chat-box/chat-box.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 interface Receipt {
+  id?: number;
   date: string;
   store: string;
   amount: number;
@@ -20,7 +22,10 @@ interface Receipt {
 export class ReceiptListComponent {
   dateRange: string = '01.04-01.05.2025';
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   openVoiceChat() {
     const dialogRef = this.dialog.open(ChatBoxComponent, {
@@ -35,12 +40,18 @@ export class ReceiptListComponent {
     });
   }
 
+  navigateToDetails(receipt: Receipt) {
+    // W rzeczywistej aplikacji użylibyśmy prawdziwego ID
+    const id = 1;
+    this.router.navigate(['/receipts', id]);
+  }
+
   receipts: Receipt[] = [
-    { date: '23-04-2025', store: 'Lidl', amount: 123.46 },
-    { date: '23-04-2025', store: 'Rossmann', amount: 123.46 },
-    { date: '22-04-2025', store: 'Biedronka', amount: 123.46 },
-    { date: '23-04-2025', store: 'Lidl', amount: 123.46 },
-    { date: '23-04-2025', store: 'Rossmann', amount: 123.46 },
-    { date: '22-04-2025', store: 'Biedronka', amount: 123.46 }
+    { id: 1, date: '23-04-2025', store: 'Lidl', amount: 123.46 },
+    { id: 2, date: '23-04-2025', store: 'Rossmann', amount: 123.46 },
+    { id: 3, date: '22-04-2025', store: 'Biedronka', amount: 123.46 },
+    { id: 4, date: '23-04-2025', store: 'Lidl', amount: 123.46 },
+    { id: 5, date: '23-04-2025', store: 'Rossmann', amount: 123.46 },
+    { id: 6, date: '22-04-2025', store: 'Biedronka', amount: 123.46 }
   ];
 }

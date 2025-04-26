@@ -8,7 +8,7 @@
   </div>
 
   <div class="receipts">
-    <div class="receipt-item" *ngFor="let receipt of receipts">
+    <div class="receipt-item" *ngFor="let receipt of receipts" (click)="navigateToDetails(receipt)">
       <div class="receipt-details">
         <div class="receipt-date">{{receipt.date}}</div>
         <div class="receipt-store">{{receipt.store}}</div>
