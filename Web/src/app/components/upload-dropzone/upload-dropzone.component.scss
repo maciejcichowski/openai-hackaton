@@ -98,7 +98,14 @@
   }
 }
 
-::ng-deep .error-snackbar {
-  background-color: #f44336;
-  color: white;
+::ng-deep .mat-mdc-snack-bar-container.error-snackbar {
+  background-color: #f44336 !important;
+
+  .mdc-snackbar__surface {
+    background-color: #f44336 !important;
+  }
+
+  .mdc-snackbar__label {
+    color: white !important;
+  }
 }
