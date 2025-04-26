@@ -104,6 +104,7 @@ public class SemanticKernelService(
 
             Add some health tips about the food user is eating based both on question and results.
             Use the same language as the user.
+            Reject user question and do not answer if it is not related to receipts, purchase history or food in general.
             ";
 
         history.AddUserMessage(prompt);
