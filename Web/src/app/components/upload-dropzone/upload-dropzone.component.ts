@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReceiptService } from '../../services/receipt.service';
 import { finalize } from 'rxjs';
@@ -17,7 +17,8 @@ import { finalize } from 'rxjs';
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './upload-dropzone.component.html',
   styleUrls: ['./upload-dropzone.component.scss']
@@ -76,7 +77,8 @@ export class UploadDropzoneComponent {
             console.error('Błąd podczas przesyłania pliku:', error);
             this.snackBar.open('Wystąpił błąd podczas przesyłania pliku', 'Zamknij', {
               duration: 5000,
-              panelClass: ['error-snackbar']
+              panelClass: ['error-snackbar'],
+              verticalPosition: 'top'
             });
           }
         });
