@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -28,13 +28,15 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
   isRecording = false;
+  isProcessing = false;
   messages: Message[] = [];
   newMessage: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<ChatBoxComponent>,
     @Inject(MAT_DIALOG_DATA) private data: DialogData,
-    private receiptService: ReceiptService
+    private receiptService: ReceiptService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,6 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         
         // Stop all tracks to release the microphone
         stream.getTracks().forEach(track => track.stop());
-        this.isRecording = false;
       };
 
       // Start recording
@@ -90,6 +91,8 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   stopRecording() {
     if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+      this.isRecording = false;
+      this.isProcessing = true;
       this.mediaRecorder.stop();
       this.messages.push({
         text: 'Processing your question...',
@@ -106,42 +109,35 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   private async sendVoiceRecording(audioBlob: Blob) {
     try {
-      // Convert blob to base64
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
       
       reader.onloadend = () => {
         const base64Audio = reader.result as string;
-        // Remove the data URL prefix (e.g., "data:audio/wav;base64,")
         const base64Data = base64Audio.split(',')[1];
         
-        // Send to service
-        this.receiptService.sendVoiceRecording(base64Data).subscribe(
-          response => {
+        this.receiptService.sendVoiceRecording(base64Data).subscribe({
+          next: (response) => {
             console.log('Voice recording sent successfully:', response);
             this.messages.push({
-              text: 'Your question has been processed.',
+              text: response.answer,
               sender: 'bot',
               timestamp: new Date()
             });
-            // Add the response from the API if available
-            if (response && response.text) {
-              this.messages.push({
-                text: response.text,
-                sender: 'bot',
-                timestamp: new Date()
-              });
-            }
           },
-          error => {
+          error: (error) => {
             console.error('Error sending voice recording:', error);
             this.messages.push({
               text: 'Error processing your question. Please try again.',
               sender: 'bot',
               timestamp: new Date()
             });
+          },
+          complete: () => {
+            this.isProcessing = false;
+            this.cdr.detectChanges();
           }
-        );
+        });
       };
     } catch (error) {
       console.error('Error processing voice recording:', error);
@@ -150,6 +146,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         sender: 'bot',
         timestamp: new Date()
       });
+      this.cdr.detectChanges();
     }
   }
 
