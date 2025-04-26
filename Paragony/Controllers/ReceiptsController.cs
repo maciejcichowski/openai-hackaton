@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Paragony.Abstract;
 using Paragony.Models;
-using System.IO;
 
 namespace Paragony.Controllers;
 

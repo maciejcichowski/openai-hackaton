@@ -25,15 +25,14 @@ export class ReceiptService {
   }
 
   uploadReceipt(base64File: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/upload`, { base64Image: base64File });
+    return this.http.post(`${this.apiUrl}/receipts/upload`, { base64Image: base64File });
   }
 
   sendVoiceRecording(base64Audio: string): Observable<any> {
     const payload = {
-      audioData: base64Audio,
-      format: 'wav'
+      base64Audio: base64Audio
     };
 
-    return this.http.post(`${this.apiUrl}/voice-input`, payload);
+    return this.http.post(`${this.apiUrl}/voice/process`, payload);
   }
 }
