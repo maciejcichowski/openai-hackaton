@@ -203,5 +203,25 @@ public class SemanticKernelService(
 
             return sb.ToString();
         }
+
+        [KernelFunction]
+        [Description("Search spendings by store name")]
+        public async Task<string> SearchReceiptsByStoreName(
+            [Description("The keyword to search for")]
+            string keyword)
+        {
+            var spendings = await _receiptService.SearchSpendingsByStoreName(keyword);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Found {spendings.Count} receipts matching '{keyword}':");
+
+            foreach (var spedning in spendings)
+            {
+                sb.AppendLine(
+                    $"- {spedning.Name} in {spedning.Receipt.StoreName} on {spedning.Receipt.PurchaseDate.ToShortDateString()}");
+            }
+
+            return sb.ToString();
+        }
     }
 }

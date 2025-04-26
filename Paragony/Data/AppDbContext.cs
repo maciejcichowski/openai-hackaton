@@ -61,7 +61,8 @@ public class AppDbContext : DbContext
             new Category { Id = Guid.Parse("D3225F27-B658-4696-B2B8-68C7670E2CD7"), Name = "Elektronika", Description = "Urządzenia elektroniczne" },
             new Category { Id = Guid.Parse("AB5BDD86-8BF1-4ED4-8EE1-9A2B9E6995A9"), Name = "Ubrania", Description = "Odzież i obuwie" },
             new Category { Id = Guid.Parse("27DFB8CE-F64A-442D-B3A8-9A767DD83A0E"), Name = "Dom", Description = "Artykuły domowe" },
-            new Category { Id = Guid.Parse("27653B89-3B92-4ACE-87C3-F025DCAB07B3"), Name = "Alkohol", Description = "Alkohol" }    ,
+            new Category { Id = Guid.Parse("27653B89-3B92-4ACE-87C3-F025DCAB07B3"), Name = "Alkohol", Description = "Alkohol" },
+            new Category { Id = Guid.Parse("e9ec3a1a-3373-4baf-a34c-546249dd69b5"), Name = "Leki", Description = "Leki" },
             new Category { Id = Guid.Parse("7223583B-AC12-4DB7-8043-B9D81427FF9E"), Name = "Inne", Description = "Inne" }
         );
     }
