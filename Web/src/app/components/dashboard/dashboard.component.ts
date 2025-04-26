@@ -30,4 +30,8 @@ export class DashboardComponent {
   navigateToReceipts() {
     this.router.navigate(['/receipts']);
   }
+
+  navigateToTips() {
+    this.router.navigate(['/tips']);
+  }
 }

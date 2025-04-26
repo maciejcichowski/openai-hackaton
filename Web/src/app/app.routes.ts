@@ -36,5 +36,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/dashboard/dashboard.component')
       .then(m => m.DashboardComponent),
     data: { fullScreen: true }
+  },
+  {
+    path: 'tips',
+    loadComponent: () => import('./components/tips/tips.component')
+      .then(m => m.TipsComponent),
+    data: { fullScreen: true }
   }
 ];

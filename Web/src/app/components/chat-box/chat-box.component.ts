@@ -27,6 +27,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   isProcessing = false;
   messages: ChatMessage[] = [];
   newMessage: string = '';
+  audio: HTMLAudioElement = new Audio();
 
   constructor(
     private dialogRef: MatDialogRef<ChatBoxComponent>,
@@ -69,6 +70,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       this.mediaRecorder = new MediaRecorder(stream);
       this.audioChunks = [];
       this.isRecording = true;
+      this.audio.pause();
 
       this.mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -107,6 +109,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   closeDialog() {
     this.stopRecording();
+    this.audio.pause();
     this.dialogRef.close();
   }
 
@@ -199,6 +202,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   sendMessage(voiceMessage: string | null = null) {
     if (this.newMessage.trim() || voiceMessage) {
+      this.audio.pause();
       const messageText = voiceMessage || this.newMessage;
       this.newMessage = '';
       
@@ -222,10 +226,10 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
                 const blob = response.body;
                 if (blob) {
                   const url = URL.createObjectURL(blob);
-                  const audio = new Audio(url);
-                  audio.play().catch(error => console.error('Error playing audio:', error));
+                  this.audio = new Audio(url);
+                  this.audio.play().catch(error => console.error('Error playing audio:', error));
                   // Clean up the URL after the audio is done playing
-                  audio.onended = () => URL.revokeObjectURL(url);
+                  this.audio.onended = () => URL.revokeObjectURL(url);
                 }
               },
               error: (error) => {

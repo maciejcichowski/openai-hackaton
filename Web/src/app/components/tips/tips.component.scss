@@ -1,0 +1,117 @@
+.tips-container {
+  min-height: 100vh;
+  background-color: #000000;
+  color: white;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 40px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 30px;
+  }
+
+  .welcome-title {
+    font-size: 24px;
+    font-weight: 500;
+    margin-left: 5px;
+
+    @media (min-width: 768px) {
+      font-size: 32px;
+    }
+  }
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (min-width: 768px) {
+    gap: 20px;
+  }
+}
+
+.tip-item {
+  background-color: #1E1E1E;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2A2A2A;
+  }
+
+  .tip-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+
+    i {
+      font-size: 24px;
+      color: white;
+    }
+  }
+
+  .tip-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .tip-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: white;
+    }
+
+    .tip-description {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.4;
+    }
+  }
+
+  @media (min-width: 768px) {
+    padding: 24px;
+
+    .tip-icon {
+      width: 56px;
+      height: 56px;
+
+      i {
+        font-size: 28px;
+      }
+    }
+
+    .tip-content {
+      gap: 10px;
+
+      .tip-title {
+        font-size: 20px;
+      }
+
+      .tip-description {
+        font-size: 16px;
+      }
+    }
+  }
+}
