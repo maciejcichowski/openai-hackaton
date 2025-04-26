@@ -39,6 +39,10 @@ public class OpenAiService : IOpenAIService
                 ChatMessageContentPart.CreateTextPart(
                     "Analyze this receipt image and extract all the information in JSON format"),
                 ChatMessageContentPart.CreateTextPart(
+                    "When providing item prices, ensure to calculate and include any applicable discounts."),
+                ChatMessageContentPart.CreateTextPart(
+                    "Always save price as total price for all items."),
+                ChatMessageContentPart.CreateTextPart(
                     $"Categorize each grocery and shopping items. The available categories are: {categoryNamesString}."),
                 ChatMessageContentPart.CreateImagePart(imageData, "image/jpeg"))
         ];
