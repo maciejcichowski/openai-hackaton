@@ -213,8 +213,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
       // Send message to service with chat history
       this.receiptService.sendMessage(messageText, this.messages).subscribe({
-        next: (response) => {          
-          // Add bot's response
+        next: (response) => {
           this.updateStatusMessage(response);
 
           if (voiceMessage) {

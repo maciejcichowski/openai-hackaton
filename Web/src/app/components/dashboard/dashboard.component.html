@@ -2,13 +2,18 @@
   <h1 class="welcome-title">Welcome, user</h1>
 
   <!-- Voice Input Section -->
-  <div class="voice-input-section" (click)="openVoiceChat()">
-    <div class="voice-input-icons">
-      <i class="fas fa-microphone"></i>
+  <div class="voice-input-section">
+    <div class="main-chat-area" (click)="openChat(false)">
+      <div class="voice-input-icons">
+        <i class="fas fa-comments"></i>
+      </div>
+      <div class="voice-input-content">
+        <span class="voice-input-title">Chat</span>
+        <span class="voice-input-subtitle">Ask questions about your expenses</span>
+      </div>
     </div>
-    <div class="voice-input-content">
-      <span class="voice-input-title">Ask questions</span>
-      <span class="voice-input-subtitle">Voice input for insights</span>
+    <div class="voice-button" (click)="openChat(true); $event.stopPropagation()">
+      <i class="fas fa-microphone"></i>
     </div>
   </div>
 

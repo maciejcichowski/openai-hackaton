@@ -36,60 +36,85 @@ body {
 
 // Voice Input Section
 .voice-input-section {
-  background-color: #1E1E1E;
-  border-radius: 8px;
-  padding: 16px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  background: #1E1E1E;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 20px 0;
   cursor: pointer;
+  transition: all 0.3s ease;
 
-  @media (min-width: 768px) {
-    padding: 24px;
-    border-radius: 12px;
-    margin-bottom: 40px;
+  .main-chat-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  .voice-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    margin-left: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    i {
+      font-size: 20px;
+      color: white;
+    }
   }
 
   .voice-input-icons {
     display: flex;
-    gap: 12px;
     align-items: center;
-    padding-left: 12px;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    margin-right: 16px;
 
     i {
       font-size: 24px;
-      color: #ffffff;
-
-      @media (min-width: 768px) {
-        font-size: 28px;
-      }
+      color: white;
     }
   }
 
   .voice-input-content {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    text-align: center;
 
     .voice-input-title {
       font-size: 16px;
       font-weight: 500;
-
-      @media (min-width: 768px) {
-        font-size: 20px;
-      }
+      color: white;
     }
 
     .voice-input-subtitle {
-      font-size: 12px;
+      font-size: 14px;
       color: rgba(255, 255, 255, 0.6);
-
-      @media (min-width: 768px) {
-        font-size: 14px;
-      }
+      margin-top: 4px;
     }
+  }
+
+  &:hover {
+    background-color: #2A2A2A;
   }
 }
 

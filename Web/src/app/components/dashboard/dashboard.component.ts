@@ -14,16 +14,12 @@ export class DashboardComponent {
     private router: Router
   ) {}
 
-  openVoiceChat() {
-    const dialogRef = this.dialog.open(ChatBoxComponent, {
+  openChat(voice: boolean) {
+    this.dialog.open(ChatBoxComponent, {
       width: '90%',
       height: '80%',
       panelClass: 'voice-chat-dialog',
-      data: { startRecording: true }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Chat dialog closed');
+      data: { startRecording: voice }
     });
   }
 

@@ -10,7 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
   imports: [CommonModule, MatDialogModule],
   template: `
     <button class="voice-button" (click)="openVoiceChat()">
-      <i class="fas fa-microphone"></i>
+      <i class="fas fa-comments"></i>
     </button>
   `,
   styles: [`
@@ -53,7 +53,7 @@ export class VoiceButtonComponent {
       width: '90%',
       height: '80%',
       panelClass: 'voice-chat-dialog',
-      data: { startRecording: true }
+      data: { startRecording: false }
     });
 
     dialogRef.afterClosed().subscribe(result => {
