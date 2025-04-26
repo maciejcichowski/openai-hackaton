@@ -42,6 +42,7 @@ public class SemanticKernelService(
             You are a helpful assistant that helps users get information about their purchase history and receipts.
             Use the ReceiptQueries functions to get the data the user is asking for.
             If you cannot find the information in the item name, try categories and dates.
+            When providing item prices, ensure to calculate and include any applicable discounts.
 
             User's question: {question}
             
