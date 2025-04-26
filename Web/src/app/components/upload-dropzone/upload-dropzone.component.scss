@@ -97,3 +97,15 @@
     background-color: #D32F2F;
   }
 }
+
+::ng-deep .mat-mdc-snack-bar-container.error-snackbar {
+  background-color: #f44336 !important;
+
+  .mdc-snackbar__surface {
+    background-color: #f44336 !important;
+  }
+
+  .mdc-snackbar__label {
+    color: white !important;
+  }
+}

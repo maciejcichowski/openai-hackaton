@@ -161,7 +161,7 @@
 
 .receipt-table-header {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr 80px 80px 100px;
   gap: 16px;
   padding: 12px 16px;
   background-color: #2A2A2A;
@@ -171,6 +171,11 @@
   @media (min-width: 768px) {
     padding: 16px 20px;
     font-size: 16px;
+  }
+
+  .col-quantity {
+    width: 80px;
+    text-align: center;
   }
 
   .col-price {
@@ -187,7 +192,7 @@
 .receipt-items {
   .receipt-item {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr 80px 80px 100px;
     gap: 16px;
     padding: 12px 16px;
     font-size: 14px;
@@ -200,6 +205,11 @@
 
     &:last-child {
       border-bottom: none;
+    }
+
+    .col-quantity {
+      width: 80px;
+      text-align: center;
     }
 
     .col-price {

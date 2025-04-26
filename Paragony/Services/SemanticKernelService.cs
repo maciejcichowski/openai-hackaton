@@ -47,6 +47,9 @@ public class SemanticKernelService(
             User's question: {question}
             
             Think step by step about what information you need to retrieve to answer the question.
+
+            Add some health tips about the food user is eating based both on question and results.
+            Use the same language as the user.
             ";
 
         var history = new ChatHistory();

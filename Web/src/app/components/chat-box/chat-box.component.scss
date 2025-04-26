@@ -4,7 +4,7 @@
   height: 100%;
   background-color: #121212;
   color: white;
-  border-radius:  25px;
+  border-radius: 25px;
 }
 
 .chat-header {
@@ -14,6 +14,7 @@
   padding: 16px;
   background-color: #1E1E1E;
   border-bottom: 1px solid #333;
+  border-radius: 25px 25px 0 0;
 
   h2 {
     margin: 0;
@@ -85,14 +86,15 @@
   padding: 16px 16px 0px 16px;
   background-color: #1E1E1E;
   border-top: 1px solid #333;
+  border-radius: 0 0 25px 25px;
 
   .message-input {
     flex: 1;
-    //margin-bottom: -1.25em;
 
     ::ng-deep {
       .mat-mdc-form-field-flex {
         background-color: #2A2A2A;
+        padding-right: 8px !important;
       }
 
       .mat-mdc-text-field-wrapper {
@@ -108,15 +110,51 @@
       }
 
       .mdc-text-field--outlined input {
-        color: #ffffff; /* Text color */
+        color: #ffffff;
       }
 
       .mdc-text-field--outlined input::placeholder {
-        color: #ffffff; /* Placeholder color */
-        opacity: 0.5; /* Ensure placeholder color isn't faded */
+        color: #ffffff;
+        opacity: 0.5;
+      }
+
+      // Style for the send button inside input
+      .mat-mdc-icon-button {
+        color: #ffffff;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+
+        &:hover:not([disabled]) {
+          opacity: 1;
+        }
+
+        &[disabled] {
+          opacity: 0.3;
+        }
       }
     }
   }
+
+  // Style for the record button
+  .mat-mdc-fab {
+    background-color: #E53935;
+    color: white;
+    transition: all 0.2s ease;
+
+    &:hover:not([disabled]) {
+      background-color: darken(#E53935, 5%);
+      transform: scale(1.05);
+    }
+
+    &[disabled] {
+      opacity: 0.5;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  border-radius: 25px;
+  overflow: hidden;
 }
 
 @keyframes pulse {

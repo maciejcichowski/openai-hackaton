@@ -5,8 +5,15 @@
       <h1>Receipt list</h1>
     </div>
     <div class="date-range">
-      <span>{{dateRange}}</span>
-      <i class="fas fa-calendar"></i>
+      <mat-form-field>
+        <mat-label>Date range</mat-label>
+        <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
     </div>
   </div>
 
@@ -27,7 +34,5 @@
     </ng-template>
   </div>
 
-  <button class="voice-button" (click)="openVoiceChat()">
-    <i class="fas fa-microphone"></i>
-  </button>
+  <app-voice-button></app-voice-button>
 </div>

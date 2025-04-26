@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -27,14 +27,17 @@ interface Message {
 export class ChatBoxComponent implements OnInit, OnDestroy {
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
+  private statusMessageIndex: number = -1;
   isRecording = false;
+  isProcessing = false;
   messages: Message[] = [];
   newMessage: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<ChatBoxComponent>,
     @Inject(MAT_DIALOG_DATA) private data: DialogData,
-    private receiptService: ReceiptService
+    private receiptService: ReceiptService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -45,6 +48,24 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.stopRecording();
+  }
+
+  private updateStatusMessage(text: string) {
+    if (this.statusMessageIndex === -1) {
+      this.messages.push({
+        text,
+        sender: 'bot',
+        timestamp: new Date()
+      });
+      this.statusMessageIndex = this.messages.length - 1;
+    } else {
+      this.messages[this.statusMessageIndex] = {
+        text,
+        sender: 'bot',
+        timestamp: new Date()
+      };
+    }
+    this.cdr.detectChanges();
   }
 
   async startRecording() {
@@ -66,36 +87,26 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         
         // Stop all tracks to release the microphone
         stream.getTracks().forEach(track => track.stop());
-        this.isRecording = false;
       };
 
       // Start recording
       this.mediaRecorder.start();
       
-      // Add initial message
-      this.messages.push({
-        text: 'Recording started. Speak your question...',
-        sender: 'bot',
-        timestamp: new Date()
-      });
+      // Update status message
+      this.updateStatusMessage('Listening to your voice...');
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      this.messages.push({
-        text: 'Error accessing microphone. Please check your permissions.',
-        sender: 'bot',
-        timestamp: new Date()
-      });
+      this.updateStatusMessage('Error accessing microphone. Please check your permissions.');
+      this.statusMessageIndex = -1;
     }
   }
 
   stopRecording() {
     if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+      this.isRecording = false;
+      this.isProcessing = true;
       this.mediaRecorder.stop();
-      this.messages.push({
-        text: 'Processing your question...',
-        sender: 'bot',
-        timestamp: new Date()
-      });
+      this.updateStatusMessage('Processing your question...');
     }
   }
 
@@ -106,50 +117,96 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   private async sendVoiceRecording(audioBlob: Blob) {
     try {
-      // Convert blob to base64
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
       
       reader.onloadend = () => {
         const base64Audio = reader.result as string;
-        // Remove the data URL prefix (e.g., "data:audio/wav;base64,")
         const base64Data = base64Audio.split(',')[1];
         
-        // Send to service
-        this.receiptService.sendVoiceRecording(base64Data).subscribe(
-          response => {
-            console.log('Voice recording sent successfully:', response);
+        // First transcribe the audio
+        this.receiptService.transcribeAudio(base64Data).subscribe({
+          next: (transcribedText) => {
+            // Remove the processing message
+            if (this.statusMessageIndex !== -1) {
+              this.messages.splice(this.statusMessageIndex, 1);
+              this.statusMessageIndex = -1;
+            }
+
+            // Add the transcribed text as a user message
             this.messages.push({
-              text: 'Your question has been processed.',
-              sender: 'bot',
+              text: transcribedText,
+              sender: 'user',
               timestamp: new Date()
             });
-            // Add the response from the API if available
-            if (response && response.text) {
-              this.messages.push({
-                text: response.text,
-                sender: 'bot',
-                timestamp: new Date()
-              });
-            }
+
+            // Now send the audio for processing
+            this.receiptService.sendVoiceRecording(base64Data).subscribe({
+              next: (response) => {
+                console.log('Voice recording sent successfully:', response);
+                // Add bot's answer as a new message
+                this.messages.push({
+                  text: response.answer,
+                  sender: 'bot',
+                  timestamp: new Date()
+                });
+
+                this.receiptService.getVoiceRecording(response.answer).subscribe({
+                  next: (response) => {
+                    const blob = response.body;
+                    if (blob) {
+                      const url = URL.createObjectURL(blob);
+                      const audio = new Audio(url);
+                      audio.play().catch(error => console.error('Error playing audio:', error));
+                      // Clean up the URL after the audio is done playing
+                      audio.onended = () => URL.revokeObjectURL(url);
+                    }
+                  },
+                  error: (error) => {
+                    console.error('Error receiving voice recording:', error);
+                  }
+                });
+              },
+              error: (error) => {
+                console.error('Error sending voice recording:', error);
+                this.messages.push({
+                  text: 'Error processing your question. Please try again.',
+                  sender: 'bot',
+                  timestamp: new Date()
+                });
+              },
+              complete: () => {
+                this.isProcessing = false;
+                this.cdr.detectChanges();
+              }
+            });
           },
-          error => {
-            console.error('Error sending voice recording:', error);
+          error: (error) => {
+            console.error('Error transcribing audio:', error);
+            if (this.statusMessageIndex !== -1) {
+              this.messages.splice(this.statusMessageIndex, 1);
+              this.statusMessageIndex = -1;
+            }
             this.messages.push({
-              text: 'Error processing your question. Please try again.',
+              text: 'Error transcribing your message. Please try again.',
               sender: 'bot',
               timestamp: new Date()
             });
           }
-        );
+        });
       };
     } catch (error) {
       console.error('Error processing voice recording:', error);
+      if (this.statusMessageIndex !== -1) {
+        this.messages.splice(this.statusMessageIndex, 1);
+        this.statusMessageIndex = -1;
+      }
       this.messages.push({
         text: 'Error processing the recording. Please try again.',
         sender: 'bot',
         timestamp: new Date()
       });
+      this.cdr.detectChanges();
     }
   }
 
