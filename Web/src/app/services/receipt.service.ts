@@ -5,7 +5,7 @@ import { Receipt } from '../models/receipt.model';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 import { ChatMessage, ChatRequest } from '../models/chat.model';
-import { DashboardSummary } from '../models/dashboard.model';
+import { CategorySummary } from '../models/dashboard.model';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +70,7 @@ export class ReceiptService {
     });
   }
 
-  getDashboardSummary(startDate?: Date | null, endDate?: Date | null): Observable<DashboardSummary> {
+  getDashboardSummary(startDate?: Date | null, endDate?: Date | null): Observable<CategorySummary[]> {
     let params = new HttpParams();
 
     if (startDate) {
@@ -81,7 +81,7 @@ export class ReceiptService {
       params = params.set('dateTo', this.formatDateToDateOnly(endDate));
     }
 
-    return this.http.get<DashboardSummary>(`${this.apiUrl}/receipts/categories`,  { params });
+    return this.http.get<CategorySummary[]>(`${this.apiUrl}/receipts/categories`,  { params });
   }
 
   sendMessage(message: string, history: ChatMessage[]): Observable<string> {

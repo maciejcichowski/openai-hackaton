@@ -52,14 +52,14 @@
         </mat-form-field>
       </div>
     </div>
-    
+
     <div class="category-list">
-      <div class="category-item" *ngFor="let category of dashboardSummary?.categories">
+      <div class="category-item" *ngFor="let category of dashboardSummary">
         <i class="fas" [ngClass]="getCategoryIcon(category.name)"></i>
         <span class="category-name">{{ category.name }}</span>
         <span class="category-amount">{{ category.total | number:'1.2-2' }}</span>
       </div>
-      <div class="no-data" *ngIf="!dashboardSummary?.categories?.length">
+      <div class="no-data" *ngIf="!dashboardSummary?.length">
         No data available for selected date range
       </div>
     </div>

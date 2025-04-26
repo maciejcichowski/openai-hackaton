@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { ReceiptService } from '../../services/receipt.service';
-import { DashboardSummary } from '../../models/dashboard.model';
+import { CategorySummary } from '../../models/dashboard.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
     end: new FormControl<Date | null>(null),
   });
   maxDate = new Date();
-  dashboardSummary: DashboardSummary | null = null;
+  dashboardSummary: CategorySummary[] | null = null;
 
   constructor(
     private dialog: MatDialog,
