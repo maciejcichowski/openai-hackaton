@@ -1,3 +1,1 @@
-pip install flask openai
-
-python receipt_agent_api.py
+pip install flask openai sqlalchemy psycopg2-binary

@@ -1,0 +1,51 @@
+@apiKey = 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
+
+### Test Process Question Endpoint
+
+POST http://localhost:5000/process_question
+Content-Type: application/json
+X-API-Key: {{apiKey}}
+
+{
+    "question": "How much did I spend on electronics last month?"
+}
+
+### Test Get Spending by Category
+
+POST http://localhost:5000/process_question
+Content-Type: application/json
+X-API-Key: {{apiKey}}
+
+{
+    "question": "What is the total spending in the category 'Jedzenie'?"
+}
+
+### Test Get Spending by Date
+
+POST http://localhost:5000/process_question
+Content-Type: application/json
+X-API-Key: {{apiKey}}
+
+{
+    "question": "How much did I spend on 2023-10-01?"
+}
+
+### Test Search Receipts
+
+POST http://localhost:5000/process_question
+Content-Type: application/json
+X-API-Key: {{apiKey}}
+
+{
+    "question": "Show me all receipts from 'Walmart'."
+}
+
+### Test Get Last Spending by Keyword
+
+POST http://localhost:5000/process_question
+Content-Type: application/json
+X-API-Key: {{apiKey}}
+
+{
+    "question": "What was my last purchase containing 'laptop'?"
+}
