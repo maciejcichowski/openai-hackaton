@@ -6,15 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReceiptService } from '../../services/receipt.service';
+import { ChatMessage } from '../../models/chat.model';
 
 interface DialogData {
   startRecording: boolean;
-}
-
-interface Message {
-  text: string;
-  sender: 'user' | 'bot';
-  timestamp: Date;
 }
 
 @Component({
@@ -30,7 +25,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   private statusMessageIndex: number = -1;
   isRecording = false;
   isProcessing = false;
-  messages: Message[] = [];
+  messages: ChatMessage[] = [];
   newMessage: string = '';
 
   constructor(
@@ -127,59 +122,52 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         // First transcribe the audio
         this.receiptService.transcribeAudio(base64Data).subscribe({
           next: (transcribedText) => {
-            // Remove the processing message
             if (this.statusMessageIndex !== -1) {
               this.messages.splice(this.statusMessageIndex, 1);
               this.statusMessageIndex = -1;
             }
-
-            // Add the transcribed text as a user message
-            this.messages.push({
-              text: transcribedText,
-              sender: 'user',
-              timestamp: new Date()
-            });
+            this.sendMessage(transcribedText);
 
             // Now send the audio for processing
-            this.receiptService.sendVoiceRecording(base64Data).subscribe({
-              next: (response) => {
-                console.log('Voice recording sent successfully:', response);
-                // Add bot's answer as a new message
-                this.messages.push({
-                  text: response.answer,
-                  sender: 'bot',
-                  timestamp: new Date()
-                });
-
-                this.receiptService.getVoiceRecording(response.answer).subscribe({
-                  next: (response) => {
-                    const blob = response.body;
-                    if (blob) {
-                      const url = URL.createObjectURL(blob);
-                      const audio = new Audio(url);
-                      audio.play().catch(error => console.error('Error playing audio:', error));
-                      // Clean up the URL after the audio is done playing
-                      audio.onended = () => URL.revokeObjectURL(url);
-                    }
-                  },
-                  error: (error) => {
-                    console.error('Error receiving voice recording:', error);
-                  }
-                });
-              },
-              error: (error) => {
-                console.error('Error sending voice recording:', error);
-                this.messages.push({
-                  text: 'Error processing your question. Please try again.',
-                  sender: 'bot',
-                  timestamp: new Date()
-                });
-              },
-              complete: () => {
-                this.isProcessing = false;
-                this.cdr.detectChanges();
-              }
-            });
+            //this.receiptService.sendVoiceRecording(base64Data).subscribe({
+            //  next: (response) => {
+            //    console.log('Voice recording sent successfully:', response);
+            //    // Add bot's answer as a new message
+            //    this.messages.push({
+            //      text: response.answer,
+            //      sender: 'bot',
+            //      timestamp: new Date()
+            //    });
+//
+            //    this.receiptService.getVoiceRecording(response.answer).subscribe({
+            //      next: (response) => {
+            //        const blob = response.body;
+            //        if (blob) {
+            //          const url = URL.createObjectURL(blob);
+            //          const audio = new Audio(url);
+            //          audio.play().catch(error => console.error('Error playing audio:', error));
+            //          // Clean up the URL after the audio is done playing
+            //          audio.onended = () => URL.revokeObjectURL(url);
+            //        }
+            //      },
+            //      error: (error) => {
+            //        console.error('Error receiving voice recording:', error);
+            //      }
+            //    });
+            //  },
+            //  error: (error) => {
+            //    console.error('Error sending voice recording:', error);
+            //    this.messages.push({
+            //      text: 'Error processing your question. Please try again.',
+            //      sender: 'bot',
+            //      timestamp: new Date()
+            //    });
+            //  },
+            //  complete: () => {
+            //    this.isProcessing = false;
+            //    this.cdr.detectChanges();
+            //  }
+            //});
           },
           error: (error) => {
             console.error('Error transcribing audio:', error);
@@ -198,7 +186,6 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error processing voice recording:', error);
       if (this.statusMessageIndex !== -1) {
-        this.messages.splice(this.statusMessageIndex, 1);
         this.statusMessageIndex = -1;
       }
       this.messages.push({
@@ -210,14 +197,56 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendMessage() {
-    if (this.newMessage.trim()) {
+  sendMessage(voiceMessage: string | null = null) {
+    if (this.newMessage.trim() || voiceMessage) {
+      const messageText = voiceMessage || this.newMessage;
+      this.newMessage = '';
+      
       this.messages.push({
-        text: this.newMessage,
+        text: messageText,
         sender: 'user',
         timestamp: new Date()
       });
-      this.newMessage = '';
+
+      this.updateStatusMessage('Processing your question...');
+      this.isProcessing = true;
+
+      // Send message to service with chat history
+      this.receiptService.sendMessage(messageText, this.messages).subscribe({
+        next: (response) => {          
+          // Add bot's response
+          this.updateStatusMessage(response);
+
+          if (voiceMessage) {
+            this.receiptService.getVoiceRecording(response).subscribe({
+              next: (response) => {
+                const blob = response.body;
+                if (blob) {
+                  const url = URL.createObjectURL(blob);
+                  const audio = new Audio(url);
+                  audio.play().catch(error => console.error('Error playing audio:', error));
+                  // Clean up the URL after the audio is done playing
+                  audio.onended = () => URL.revokeObjectURL(url);
+                }
+              },
+              error: (error) => {
+                console.error('Error receiving voice recording:', error);
+              }
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error sending message:', error);
+          this.updateStatusMessage('Error processing your message. Please try again.');
+        },
+        complete: () => {
+          if (this.statusMessageIndex !== -1) {
+            this.statusMessageIndex = -1;
+          }
+          this.isProcessing = false;
+          this.cdr.detectChanges();
+        }
+      });
     }
   }
 }

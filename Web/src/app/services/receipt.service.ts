@@ -3,7 +3,8 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Receipt } from '../models/receipt.model';
 import { environment } from '../../environments/environment';
-import { switchMap, tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { ChatMessage, ChatRequest } from '../models/chat.model';
 
 @Injectable({
   providedIn: 'root'
@@ -67,4 +68,26 @@ export class ReceiptService {
       responseType: 'blob'
     });
   }
+
+  sendMessage(message: string, history: ChatMessage[]): Observable<string> {
+    let request: ChatRequest[] = [];
+    let requestMessage: ChatRequest;
+    history.forEach(h => {
+      if (h.sender === 'user') {
+        requestMessage = {
+          userMessage: h.text,
+          botMessage: ''
+        }
+      } else if (requestMessage) {
+        requestMessage.botMessage = h.text;
+        request.push(requestMessage);
+      }
+    });
+
+    return this.http.post(`${this.apiUrl}/chat`, {
+      chatHistory: request,
+      prompt: message
+    }, { responseType: 'text' });
+  }
+
 }

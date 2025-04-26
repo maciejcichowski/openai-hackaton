@@ -8,11 +8,11 @@ namespace Paragony.Controllers;
 [Route("api/[controller]")]
 public class ChatController(ISemanticKernelService semanticService) : ControllerBase
 {
-    [HttpPost("chat")]
+    [HttpPost]
     public async Task<ActionResult<string>> ProcessVoiceQuery([FromBody] ChatHistoryWithPrompt request)
     {
         var response = await semanticService.ProcessChat(request);
 
-        return response;
+        return Ok(response);
     }
 }
